@@ -1,0 +1,203 @@
+{
+  "goal": "Launch Spons Easy MVP enabling automated sponsorship proposal generation",
+  "constraints": [
+    "30-day development timeline",
+    "Stack: AdonisJS 6 + React + PostgreSQL",
+    "Minimum 50 beta users",
+    "100 proposals generated"
+  ],
+  "tasks": [
+    {
+      "id": "1",
+      "title": "Define user personas",
+      "description": "Document the 3 primary personas (creators, organizers, associations) with their pain points and motivations",
+      "dependencies": [],
+      "parallel": true,
+      "status": "pending",
+      "week": 1,
+      "artifacts": ["personas.md"]
+    },
+    {
+      "id": "2",
+      "title": "Create MVP PRD",
+      "description": "Product Requirements Document detailing MVP features with priorities and acceptance criteria",
+      "dependencies": ["1"],
+      "parallel": false,
+      "status": "pending",
+      "week": 1,
+      "artifacts": ["prd.md"]
+    },
+    {
+      "id": "3",
+      "title": "Design landing page",
+      "description": "Wireframes and copy for high-converting landing page with clear value proposition",
+      "dependencies": ["1"],
+      "parallel": true,
+      "status": "pending",
+      "week": 1,
+      "artifacts": ["landing-page.md"]
+    },
+    {
+      "id": "4",
+      "title": "Technical setup AdonisJS",
+      "description": "Initialize AdonisJS 6 project with auth, database, and base structure",
+      "dependencies": [],
+      "parallel": true,
+      "status": "pending",
+      "week": 1,
+      "artifacts": ["technical-specs.md"]
+    },
+    {
+      "id": "5",
+      "title": "Design data model",
+      "description": "Database schema for users, profiles, proposals, sponsors",
+      "dependencies": ["2"],
+      "parallel": false,
+      "status": "pending",
+      "week": 1,
+      "artifacts": ["data-model.md"]
+    },
+    {
+      "id": "6",
+      "title": "Implement authentication",
+      "description": "Register, login, password reset with AdonisJS Auth",
+      "dependencies": ["4"],
+      "parallel": false,
+      "status": "pending",
+      "week": 1,
+      "artifacts": []
+    },
+    {
+      "id": "7",
+      "title": "User profile builder",
+      "description": "Profile creation form (creator type, audience, niche, etc.)",
+      "dependencies": ["5", "6"],
+      "parallel": false,
+      "status": "pending",
+      "week": 2,
+      "artifacts": []
+    },
+    {
+      "id": "8",
+      "title": "Proposal builder",
+      "description": "Wizard interface to create a sponsorship proposal step by step",
+      "dependencies": ["7"],
+      "parallel": false,
+      "status": "pending",
+      "week": 2,
+      "artifacts": ["proposal-builder-spec.md"]
+    },
+    {
+      "id": "9",
+      "title": "Content generation engine",
+      "description": "Automatic proposal text generation based on profile and inputs",
+      "dependencies": ["8"],
+      "parallel": false,
+      "status": "pending",
+      "week": 2,
+      "artifacts": []
+    },
+    {
+      "id": "10",
+      "title": "PDF export",
+      "description": "Professional PDF generation from proposals",
+      "dependencies": ["9"],
+      "parallel": false,
+      "status": "pending",
+      "week": 3,
+      "artifacts": []
+    },
+    {
+      "id": "11",
+      "title": "User dashboard",
+      "description": "Overview of created proposals with statuses",
+      "dependencies": ["8"],
+      "parallel": true,
+      "status": "pending",
+      "week": 3,
+      "artifacts": []
+    },
+    {
+      "id": "12",
+      "title": "Proposal templates",
+      "description": "Template library by creator/event type",
+      "dependencies": ["9"],
+      "parallel": true,
+      "status": "pending",
+      "week": 3,
+      "artifacts": []
+    },
+    {
+      "id": "13",
+      "title": "Implement landing page",
+      "description": "Frontend development of landing page with waitlist form",
+      "dependencies": ["3", "4"],
+      "parallel": true,
+      "status": "pending",
+      "week": 3,
+      "artifacts": []
+    },
+    {
+      "id": "14",
+      "title": "Setup analytics & tracking",
+      "description": "PostHog or Plausible integration for conversion tracking",
+      "dependencies": ["13"],
+      "parallel": false,
+      "status": "pending",
+      "week": 4,
+      "artifacts": []
+    },
+    {
+      "id": "15",
+      "title": "Tests & QA",
+      "description": "End-to-end tests of complete user journey",
+      "dependencies": ["10", "11"],
+      "parallel": false,
+      "status": "pending",
+      "week": 4,
+      "artifacts": []
+    },
+    {
+      "id": "16",
+      "title": "Production deployment",
+      "description": "Deploy to production on Railway with CI/CD",
+      "dependencies": ["15"],
+      "parallel": false,
+      "status": "pending",
+      "week": 4,
+      "artifacts": []
+    },
+    {
+      "id": "17",
+      "title": "Beta launch",
+      "description": "Beta launch with first users and feedback collection",
+      "dependencies": ["16"],
+      "parallel": false,
+      "status": "pending",
+      "week": 4,
+      "artifacts": []
+    }
+  ],
+  "milestones": [
+    {
+      "name": "Week 1: Foundation",
+      "description": "Technical setup, personas, and product specs validated",
+      "taskIds": ["1", "2", "3", "4", "5", "6"]
+    },
+    {
+      "name": "Week 2: Core Features",
+      "description": "User profile and proposal builder functional",
+      "taskIds": ["7", "8", "9"]
+    },
+    {
+      "name": "Week 3: Polish & Export",
+      "description": "PDF export, dashboard, and landing page ready",
+      "taskIds": ["10", "11", "12", "13"]
+    },
+    {
+      "name": "Week 4: Launch",
+      "description": "Tests, deployment, and beta launch",
+      "taskIds": ["14", "15", "16", "17"]
+    }
+  ]
+}

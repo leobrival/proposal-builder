@@ -396,22 +396,26 @@ The creator economy is growing rapidly, with micro-influencers (10K-100K followe
 **Key Screens**:
 
 1. **Home Page** (`/`)
+
    - Hero section with value proposition
    - Feature highlights
    - CTA to register/login
 
 2. **Dashboard** (`/dashboard`)
+
    - Stats cards (proposals, views, leads)
    - Proposal list with status badges
    - Quick actions (edit, view, publish)
 
 3. **Proposal Builder** (`/proposals/:id/edit`)
+
    - Split-screen layout (50/50)
    - Left: Tabbed form (Content, Tiers, Media, Contact)
    - Right: Live preview with scroll sync
    - Top bar: Save indicator, Publish button, Settings
 
 4. **Public Proposal** (`/p/:slug`)
+
    - Hero with cover image and logo
    - Project description
    - Sponsorship tiers grid
@@ -664,12 +668,14 @@ Lead (many) >────── Tier (1) [optional: interested_tier_id]
 ### Analytics Platform: PostHog
 
 **Why PostHog**:
+
 - Open-source, GDPR-compliant (EU hosting available)
 - Free tier: 1M events/month (sufficient for MVP)
 - Built-in: Event tracking, funnels, session replay, feature flags
 - Self-hostable option for future data sovereignty
 
 **Implementation**:
+
 - Package: `posthog-js`
 - Host: `https://eu.posthog.com` (EU data residency)
 - Integration: Client-side via Inertia/React
@@ -799,31 +805,31 @@ Lead (many) >────── Tier (1) [optional: interested_tier_id]
 
 ### Development Timeline (21 Days / ~4 Weeks)
 
-| Phase | Duration | Deliverable |
-| ----- | -------- | ----------- |
-| **Phase 1: Setup** | 1 day | AdonisJS + Inertia + Shadcn configured |
-| **Phase 2: Foundational** | 3 days | Auth + DB ready (Login, Register, Migrations, Models) |
-| **Phase 3: US1 - Create Proposal** | 5 days | **MVP Demo** - Live builder with split-screen preview |
-| **Phase 4: US2 - Publish** | 3 days | Public URLs live (Publishing + Contact form + Leads) |
-| **Phase 5: US3 - Design** | 2 days | Customization ready (Colors, fonts, layout options) |
-| **Phase 6: US4 - PDF** | 2 days | Export functional (PDF generation service) |
-| **Phase 7: US5 - Analytics** | 3 days | CRM ready (Dashboard + Lead management) |
-| **Phase 8: Polish** | 2 days | Production ready (Security hardening, performance) |
+| Phase                              | Duration | Deliverable                                           |
+| ---------------------------------- | -------- | ----------------------------------------------------- |
+| **Phase 1: Setup**                 | 1 day    | AdonisJS + Inertia + Shadcn configured                |
+| **Phase 2: Foundational**          | 3 days   | Auth + DB ready (Login, Register, Migrations, Models) |
+| **Phase 3: US1 - Create Proposal** | 5 days   | **MVP Demo** - Live builder with split-screen preview |
+| **Phase 4: US2 - Publish**         | 3 days   | Public URLs live (Publishing + Contact form + Leads)  |
+| **Phase 5: US3 - Design**          | 2 days   | Customization ready (Colors, fonts, layout options)   |
+| **Phase 6: US4 - PDF**             | 2 days   | Export functional (PDF generation service)            |
+| **Phase 7: US5 - Analytics**       | 3 days   | CRM ready (Dashboard + Lead management)               |
+| **Phase 8: Polish**                | 2 days   | Production ready (Security hardening, performance)    |
 
 **MVP Checkpoint**: After Phase 3 (9 days) - Users can create and edit proposals with live preview
 
 ### Task Breakdown (142 Tasks Total)
 
-| Phase | Tasks | Parallel Opportunities |
-| ----- | ----- | ---------------------- |
-| Setup | 9 | 6 |
-| Foundational | 30 | 18 |
-| US1 - Create Proposal | 33 | 15 |
-| US2 - Publish | 14 | 2 |
-| US3 - Design | 11 | 5 |
-| US4 - PDF Export | 9 | 0 |
-| US5 - Leads/Analytics | 9 | 3 |
-| Polish | 27 | 4 |
+| Phase                 | Tasks | Parallel Opportunities |
+| --------------------- | ----- | ---------------------- |
+| Setup                 | 9     | 6                      |
+| Foundational          | 30    | 18                     |
+| US1 - Create Proposal | 33    | 15                     |
+| US2 - Publish         | 14    | 2                      |
+| US3 - Design          | 11    | 5                      |
+| US4 - PDF Export      | 9     | 0                      |
+| US5 - Leads/Analytics | 9     | 3                      |
+| Polish                | 27    | 4                      |
 
 **Full task breakdown**: See `/specs/001-proposal-builder/tasks.md`
 
@@ -954,16 +960,16 @@ Lead (many) >────── Tier (1) [optional: interested_tier_id]
 
 All technical implementation details are maintained in `/specs/001-proposal-builder/`:
 
-| Document | Path | Description |
-| -------- | ---- | ----------- |
-| **Feature Spec** | `spec.md` | User stories, acceptance criteria, requirements |
-| **Data Model** | `data-model.md` | Database schema, entities, relationships, migrations |
-| **API Routes** | `contracts/api-routes.md` | All endpoints, request/response schemas, rate limits |
-| **Inertia Pages** | `contracts/inertia-pages.md` | Page components, props, component organization |
-| **Implementation Plan** | `plan.md` | Technical decisions, risks, project structure |
-| **Task Breakdown** | `tasks.md` | 142 implementation tasks with dependencies |
-| **Research** | `research.md` | Technology decisions and rationale |
-| **Quickstart** | `quickstart.md` | Setup guide for new developers |
+| Document                | Path                         | Description                                          |
+| ----------------------- | ---------------------------- | ---------------------------------------------------- |
+| **Feature Spec**        | `spec.md`                    | User stories, acceptance criteria, requirements      |
+| **Data Model**          | `data-model.md`              | Database schema, entities, relationships, migrations |
+| **API Routes**          | `contracts/api-routes.md`    | All endpoints, request/response schemas, rate limits |
+| **Inertia Pages**       | `contracts/inertia-pages.md` | Page components, props, component organization       |
+| **Implementation Plan** | `plan.md`                    | Technical decisions, risks, project structure        |
+| **Task Breakdown**      | `tasks.md`                   | 142 implementation tasks with dependencies           |
+| **Research**            | `research.md`                | Technology decisions and rationale                   |
+| **Quickstart**          | `quickstart.md`              | Setup guide for new developers                       |
 
 ### Technical Docs
 

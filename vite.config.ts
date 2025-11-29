@@ -37,7 +37,11 @@ export default defineConfig({
 					"vendor-inertia": ["@inertiajs/react"],
 					"vendor-radix": ["@radix-ui/react-dialog"],
 					"vendor-lucide": ["lucide-react"],
-					"vendor-utils": ["clsx", "tailwind-merge", "class-variance-authority"],
+					"vendor-utils": [
+						"clsx",
+						"tailwind-merge",
+						"class-variance-authority",
+					],
 				},
 			},
 		},

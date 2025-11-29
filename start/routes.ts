@@ -8,7 +8,11 @@
 */
 
 import router from "@adonisjs/core/services/router";
+import transmit from "@adonisjs/transmit/services/main";
 import { middleware } from "./kernel.js";
+
+// Register Transmit routes for SSE
+transmit.registerRoutes();
 
 const RegisterController = () =>
 	import("#controllers/auth/register_controller");
@@ -24,6 +28,16 @@ const WaitlistsController = () => import("#controllers/waitlists_controller");
 const PublicProposalsController = () =>
 	import("#controllers/public_proposals_controller");
 const SubdomainController = () => import("#controllers/subdomain_controller");
+const AdminDashboardController = () =>
+	import("#controllers/admin/dashboard_controller");
+const AdminUsersController = () =>
+	import("#controllers/admin/users_controller");
+const AdminProposalsController = () =>
+	import("#controllers/admin/proposals_controller");
+const AdminMetricsController = () =>
+	import("#controllers/admin/metrics_controller");
+const AdminRoutesController = () =>
+	import("#controllers/admin/routes_controller");
 
 // Subdomain routes (e.g., techtalks.localhost:3333 or techtalks.sponseasy.com)
 router
@@ -137,3 +151,46 @@ router
 			.as("domain.check.custom");
 	})
 	.middleware(middleware.auth());
+
+// Admin routes (authenticated + admin role required)
+router
+	.group(() => {
+		// Dashboard
+		router
+			.get("/dashboard", [AdminDashboardController, "index"])
+			.as("admin.dashboard");
+
+		// API endpoint for real-time metrics
+		router
+			.get("/api/metrics", [AdminMetricsController, "index"])
+			.as("admin.api.metrics");
+
+		// API endpoint for routes listing
+		router
+			.get("/api/routes", [AdminRoutesController, "index"])
+			.as("admin.api.routes");
+
+		// Users API management
+		router
+			.put("/api/users/:id/plan", [AdminUsersController, "updatePlan"])
+			.as("admin.api.users.plan");
+		router
+			.put("/api/users/:id/admin", [AdminUsersController, "updateAdmin"])
+			.as("admin.api.users.admin");
+		router
+			.put("/api/users/:id/block", [AdminUsersController, "updateBlock"])
+			.as("admin.api.users.block");
+		router
+			.delete("/api/users/:id", [AdminUsersController, "destroy"])
+			.as("admin.api.users.destroy");
+
+		// Proposals API management
+		router
+			.put("/api/proposals/:id/status", [AdminProposalsController, "updateStatus"])
+			.as("admin.api.proposals.status");
+		router
+			.delete("/api/proposals/:id", [AdminProposalsController, "destroy"])
+			.as("admin.api.proposals.destroy");
+	})
+	.prefix("/admin")
+	.middleware([middleware.auth(), middleware.admin()]);

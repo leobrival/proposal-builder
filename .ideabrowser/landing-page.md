@@ -975,11 +975,11 @@
 
 ```typescript
 interface WaitlistFormData {
-  email: string; // Required, validated
-  creatorType?: string; // Optional: 'creator' | 'event' | 'association' | 'other'
-  source?: string; // UTM source parameter
-  referrer?: string; // Document referrer
-  timestamp: Date; // Submission timestamp
+  email: string // Required, validated
+  creatorType?: string // Optional: 'creator' | 'event' | 'association' | 'other'
+  source?: string // UTM source parameter
+  referrer?: string // Document referrer
+  timestamp: Date // Submission timestamp
 }
 ```
 

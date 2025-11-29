@@ -2,6 +2,9 @@ import { randomUUID } from "node:crypto";
 import string from "@adonisjs/core/helpers/string";
 import {
 	BaseModel,
+	afterCreate,
+	afterDelete,
+	afterUpdate,
 	beforeCreate,
 	belongsTo,
 	column,
@@ -9,6 +12,7 @@ import {
 } from "@adonisjs/lucid/orm";
 import type { BelongsTo, HasMany } from "@adonisjs/lucid/types/relations";
 import type { DateTime } from "luxon";
+import MetricsCacheService from "#services/metrics_cache_service";
 import Lead from "./lead.js";
 import Tier from "./tier.js";
 import User from "./user.js";
@@ -131,5 +135,12 @@ export default class Proposal extends BaseModel {
 		if (!proposal.designSettings) {
 			proposal.designSettings = defaultDesignSettings;
 		}
+	}
+
+	@afterCreate()
+	@afterUpdate()
+	@afterDelete()
+	static async invalidateMetricsCache() {
+		await MetricsCacheService.invalidateProposals();
 	}
 }

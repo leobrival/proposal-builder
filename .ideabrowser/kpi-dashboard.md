@@ -3,7 +3,7 @@
 **Document Info**
 
 - **Created**: 2025-11-25
-- **Last Updated**: 2025-11-25
+- **Last Updated**: 2025-11-26
 - **Version**: 1.0.0
 - **Status**: Active
 - **Author**: KPI Dashboard Agent
@@ -33,23 +33,37 @@ A proposal is considered "published" when a user clicks the "Publish" button and
 
 ### Rationale
 
-| Criterion | Why "Proposals Published" Wins |
-| --------- | ------------------------------ |
-| **Value Delivery** | A published proposal represents completed user value - the 5-minute time-to-value promise fulfilled |
-| **Leading Indicator** | Published proposals precede leads, which precede revenue |
-| **Actionable** | Low publish rate signals onboarding/builder issues; high rate signals PMF |
-| **Simple** | Single number everyone understands |
-| **Not Vanity** | Unlike signups, published proposals require real engagement |
+| Criterion             | Why "Proposals Published" Wins                                                                      |
+| --------------------- | --------------------------------------------------------------------------------------------------- |
+| **Value Delivery**    | A published proposal represents completed user value - the 5-minute time-to-value promise fulfilled |
+| **Leading Indicator** | Published proposals precede leads, which precede revenue                                            |
+| **Actionable**        | Low publish rate signals onboarding/builder issues; high rate signals PMF                           |
+| **Simple**            | Single number everyone understands                                                                  |
+| **Not Vanity**        | Unlike signups, published proposals require real engagement                                         |
 
 ### Target and Tracking
 
-| Phase | Target | Timeframe | Current | Status |
-| ----- | ------ | --------- | ------- | ------ |
-| **NOW (MVP)** | 30 proposals published | Month 1 | 0 | Not Started |
-| **NEXT** | 100 proposals published | Month 3 | - | - |
-| **LATER** | 500 proposals published | Month 6 | - | - |
+| Phase         | Target                   | Timeframe | Current | Status      |
+| ------------- | ------------------------ | --------- | ------- | ----------- |
+| **NOW (MVP)** | 100 proposals published  | Week 1    | 0       | Not Started |
+| **NEXT**      | 400 proposals published  | Month 1   | -       | -           |
+| **LATER**     | 1200 proposals published | Month 3   | -       | -           |
+
+**Weekly Target**: 100 proposals published (base metric for dynamic scaling)
 
 **Tracking Frequency**: Daily (dashboard), Weekly (team review), Monthly (board/investor)
+
+**Dynamic Target Calculation**:
+
+The dashboard automatically adjusts targets based on the selected period:
+
+| Period   | Target Calculation | Result |
+| -------- | ------------------ | ------ |
+| 7 days   | 100 / 7 × 7        | 100    |
+| 15 days  | 100 / 7 × 15       | 214    |
+| 30 days  | 100 / 7 × 30       | 429    |
+| 90 days  | 100 / 7 × 90       | 1,286  |
+| 365 days | 100 / 7 × 365      | 5,214  |
 
 **Formula**:
 
@@ -58,6 +72,8 @@ Proposals Published = COUNT(proposals WHERE status = 'published')
 
 Publishing Rate = Proposals Published / Total Proposals Created * 100
 Target Publishing Rate: >50%
+
+Dynamic Target = WEEKLY_TARGET / 7 * PERIOD_DAYS
 ```
 
 ---
@@ -68,37 +84,37 @@ Target Publishing Rate: >50%
 
 **Purpose**: Measure how effectively we attract potential users to Spons Easy.
 
-| Metric | Formula | Data Source | Update Frequency | Target | Alert Threshold |
-| ------ | ------- | ----------- | ---------------- | ------ | --------------- |
-| **Website Visitors** | COUNT(unique_sessions) per period | Plausible/PostHog | Daily | 1,000/month (M3) | <500/month |
-| **Waitlist Signups** | COUNT(waitlist_entries) | Database | Daily | 50 (pre-launch) | <30 by Day 14 |
-| **New Registrations** | COUNT(users WHERE created_at in period) | Database | Daily | 50/month (M1) | <25/month |
-| **Registration Conversion Rate** | Registrations / Visitors * 100 | Calculated | Weekly | >3% | <1.5% |
-| **Traffic by Channel** | COUNT(sessions) GROUP BY utm_source | Plausible/PostHog | Weekly | Balanced mix | Single channel >70% |
-| **CAC (Customer Acquisition Cost)** | Marketing Spend / New Customers | Finance + DB | Monthly | <EUR 50 (NOW) | >EUR 100 |
+| Metric                              | Formula                                 | Data Source       | Update Frequency | Target           | Alert Threshold     |
+| ----------------------------------- | --------------------------------------- | ----------------- | ---------------- | ---------------- | ------------------- |
+| **Website Visitors**                | COUNT(unique_sessions) per period       | Plausible/PostHog | Daily            | 1,000/month (M3) | <500/month          |
+| **Waitlist Signups**                | COUNT(waitlist_entries)                 | Database          | Daily            | 50 (pre-launch)  | <30 by Day 14       |
+| **New Registrations**               | COUNT(users WHERE created_at in period) | Database          | Daily            | 50/month (M1)    | <25/month           |
+| **Registration Conversion Rate**    | Registrations / Visitors \* 100         | Calculated        | Weekly           | >3%              | <1.5%               |
+| **Traffic by Channel**              | COUNT(sessions) GROUP BY utm_source     | Plausible/PostHog | Weekly           | Balanced mix     | Single channel >70% |
+| **CAC (Customer Acquisition Cost)** | Marketing Spend / New Customers         | Finance + DB      | Monthly          | <EUR 50 (NOW)    | >EUR 100            |
 
 **Channel Breakdown Targets** (Month 3):
 
-| Channel | Traffic % | CAC Target | Quality (ICP Match) |
-| ------- | --------- | ---------- | ------------------- |
-| Organic (SEO) | 30% | EUR 0 | 70%+ |
-| Product Hunt | 20% | EUR 0 | 60%+ |
-| Creator Communities | 25% | EUR 0-10 | 80%+ |
-| LinkedIn/Twitter | 15% | EUR 0 | 70%+ |
-| Paid Ads | 10% | EUR 30-50 | 65%+ |
+| Channel             | Traffic % | CAC Target | Quality (ICP Match) |
+| ------------------- | --------- | ---------- | ------------------- |
+| Organic (SEO)       | 30%       | EUR 0      | 70%+                |
+| Product Hunt        | 20%       | EUR 0      | 60%+                |
+| Creator Communities | 25%       | EUR 0-10   | 80%+                |
+| LinkedIn/Twitter    | 15%       | EUR 0      | 70%+                |
+| Paid Ads            | 10%       | EUR 30-50  | 65%+                |
 
 ### 2.2 Activation Metrics
 
 **Purpose**: Measure how effectively new users experience the core value proposition.
 
-| Metric | Formula | Data Source | Update Frequency | Target | Alert Threshold |
-| ------ | ------- | ----------- | ---------------- | ------ | --------------- |
-| **Activation Rate** | Users with 1st published proposal / Total signups * 100 | Database | Daily | 40% | <20% |
-| **Time to First Proposal** | AVG(first_proposal_created_at - user_created_at) | Database | Weekly | <10 min | >30 min |
-| **Time to First Publish** | AVG(first_proposal_published_at - user_created_at) | Database | Weekly | <30 min | >2 hours |
-| **Onboarding Completion Rate** | Users completing onboarding / Total signups * 100 | PostHog | Daily | 70% | <40% |
-| **Builder Abandonment Rate** | Started but not saved proposals / Started proposals * 100 | Database | Weekly | <30% | >50% |
-| **5-Minute Challenge Rate** | Users publishing in <5 min / Total signups * 100 | Database | Weekly | 25% | <10% |
+| Metric                         | Formula                                                    | Data Source | Update Frequency | Target  | Alert Threshold |
+| ------------------------------ | ---------------------------------------------------------- | ----------- | ---------------- | ------- | --------------- |
+| **Activation Rate**            | Users with 1st published proposal / Total signups \* 100   | Database    | Daily            | 40%     | <20%            |
+| **Time to First Proposal**     | AVG(first_proposal_created_at - user_created_at)           | Database    | Weekly           | <10 min | >30 min         |
+| **Time to First Publish**      | AVG(first_proposal_published_at - user_created_at)         | Database    | Weekly           | <30 min | >2 hours        |
+| **Onboarding Completion Rate** | Users completing onboarding / Total signups \* 100         | PostHog     | Daily            | 70%     | <40%            |
+| **Builder Abandonment Rate**   | Started but not saved proposals / Started proposals \* 100 | Database    | Weekly           | <30%    | >50%            |
+| **5-Minute Challenge Rate**    | Users publishing in <5 min / Total signups \* 100          | Database    | Weekly           | 25%     | <10%            |
 
 **Activation Funnel**:
 
@@ -125,64 +141,64 @@ Proposal Published (30%) -- Target: 40% (North Star Driver)
 
 **Purpose**: Measure how effectively we keep users engaged over time.
 
-| Metric | Formula | Data Source | Update Frequency | Target | Alert Threshold |
-| ------ | ------- | ----------- | ---------------- | ------ | --------------- |
-| **Day 1 Retention** | Users returning Day 1 / Signups * 100 | PostHog | Daily | 60% | <40% |
-| **Week 1 Retention** | Users returning Week 1 / Signups * 100 | PostHog | Weekly | 50% | <30% |
-| **Month 1 Retention** | Users returning Month 1 / Signups * 100 | PostHog | Monthly | 35% | <20% |
-| **DAU (Daily Active Users)** | COUNT(unique users with activity today) | Database | Daily | 30 (M3) | <15 |
-| **WAU (Weekly Active Users)** | COUNT(unique users with activity this week) | Database | Weekly | 80 (M3) | <40 |
-| **MAU (Monthly Active Users)** | COUNT(unique users with activity this month) | Database | Monthly | 150 (M3) | <75 |
-| **DAU/MAU (Stickiness)** | DAU / MAU * 100 | Calculated | Weekly | >20% | <10% |
-| **Proposals per User** | AVG(proposals per user) | Database | Weekly | >2.5 | <1.5 |
-| **Monthly Churn Rate** | Users lost / Users at start of month * 100 | Database | Monthly | <8% | >15% |
+| Metric                         | Formula                                      | Data Source | Update Frequency | Target   | Alert Threshold |
+| ------------------------------ | -------------------------------------------- | ----------- | ---------------- | -------- | --------------- |
+| **Day 1 Retention**            | Users returning Day 1 / Signups \* 100       | PostHog     | Daily            | 60%      | <40%            |
+| **Week 1 Retention**           | Users returning Week 1 / Signups \* 100      | PostHog     | Weekly           | 50%      | <30%            |
+| **Month 1 Retention**          | Users returning Month 1 / Signups \* 100     | PostHog     | Monthly          | 35%      | <20%            |
+| **DAU (Daily Active Users)**   | COUNT(unique users with activity today)      | Database    | Daily            | 30 (M3)  | <15             |
+| **WAU (Weekly Active Users)**  | COUNT(unique users with activity this week)  | Database    | Weekly           | 80 (M3)  | <40             |
+| **MAU (Monthly Active Users)** | COUNT(unique users with activity this month) | Database    | Monthly          | 150 (M3) | <75             |
+| **DAU/MAU (Stickiness)**       | DAU / MAU \* 100                             | Calculated  | Weekly           | >20%     | <10%            |
+| **Proposals per User**         | AVG(proposals per user)                      | Database    | Weekly           | >2.5     | <1.5            |
+| **Monthly Churn Rate**         | Users lost / Users at start of month \* 100  | Database    | Monthly          | <8%      | >15%            |
 
 **Cohort Retention Template**:
 
-| Cohort | Month 0 | Month 1 | Month 2 | Month 3 | Month 6 |
-| ------ | ------- | ------- | ------- | ------- | ------- |
-| Dec 2025 | 100% | 35%+ | 28%+ | 22%+ | 15%+ |
-| Jan 2026 | 100% | - | - | - | - |
+| Cohort   | Month 0 | Month 1 | Month 2 | Month 3 | Month 6 |
+| -------- | ------- | ------- | ------- | ------- | ------- |
+| Dec 2025 | 100%    | 35%+    | 28%+    | 22%+    | 15%+    |
+| Jan 2026 | 100%    | -       | -       | -       | -       |
 
 ### 2.4 Revenue Metrics
 
 **Purpose**: Measure financial health and monetization effectiveness.
 
-| Metric | Formula | Data Source | Update Frequency | Target | Alert Threshold |
-| ------ | ------- | ----------- | ---------------- | ------ | --------------- |
-| **MRR (Monthly Recurring Revenue)** | SUM(active_subscriptions * price) | Stripe | Daily | EUR 2,781 (M12) | <EUR 1,000 (M6) |
-| **ARR (Annual Recurring Revenue)** | MRR * 12 | Calculated | Monthly | EUR 33,372 (M12) | <EUR 12,000 (M6) |
-| **New MRR** | MRR from new customers this month | Stripe | Monthly | EUR 500+ (M6) | <EUR 200 |
-| **Expansion MRR** | MRR from upgrades | Stripe | Monthly | 10% of total MRR | <5% |
-| **Churned MRR** | MRR lost from cancellations | Stripe | Monthly | <5% of MRR | >10% |
-| **Net MRR Growth** | (New + Expansion - Churned) / Starting MRR * 100 | Calculated | Monthly | >15% | <5% |
-| **ARPU (Average Revenue Per User)** | MRR / Paying Customers | Calculated | Monthly | EUR 27 | <EUR 20 |
-| **Free-to-Paid Conversion** | Paid users / Total users * 100 | Database | Monthly | 4% | <2% |
-| **LTV (Customer Lifetime Value)** | ARPU * (1 / Churn Rate) | Calculated | Monthly | EUR 540 | <EUR 300 |
-| **LTV:CAC Ratio** | LTV / CAC | Calculated | Monthly | >3:1 | <2:1 |
-| **CAC Payback Period** | CAC / ARPU (months) | Calculated | Monthly | <12 months | >18 months |
+| Metric                              | Formula                                           | Data Source | Update Frequency | Target           | Alert Threshold  |
+| ----------------------------------- | ------------------------------------------------- | ----------- | ---------------- | ---------------- | ---------------- |
+| **MRR (Monthly Recurring Revenue)** | SUM(active_subscriptions \* price)                | Stripe      | Daily            | EUR 2,781 (M12)  | <EUR 1,000 (M6)  |
+| **ARR (Annual Recurring Revenue)**  | MRR \* 12                                         | Calculated  | Monthly          | EUR 33,372 (M12) | <EUR 12,000 (M6) |
+| **New MRR**                         | MRR from new customers this month                 | Stripe      | Monthly          | EUR 500+ (M6)    | <EUR 200         |
+| **Expansion MRR**                   | MRR from upgrades                                 | Stripe      | Monthly          | 10% of total MRR | <5%              |
+| **Churned MRR**                     | MRR lost from cancellations                       | Stripe      | Monthly          | <5% of MRR       | >10%             |
+| **Net MRR Growth**                  | (New + Expansion - Churned) / Starting MRR \* 100 | Calculated  | Monthly          | >15%             | <5%              |
+| **ARPU (Average Revenue Per User)** | MRR / Paying Customers                            | Calculated  | Monthly          | EUR 27           | <EUR 20          |
+| **Free-to-Paid Conversion**         | Paid users / Total users \* 100                   | Database    | Monthly          | 4%               | <2%              |
+| **LTV (Customer Lifetime Value)**   | ARPU \* (1 / Churn Rate)                          | Calculated  | Monthly          | EUR 540          | <EUR 300         |
+| **LTV:CAC Ratio**                   | LTV / CAC                                         | Calculated  | Monthly          | >3:1             | <2:1             |
+| **CAC Payback Period**              | CAC / ARPU (months)                               | Calculated  | Monthly          | <12 months       | >18 months       |
 
 **Revenue Projection (Year 1)**:
 
-| Month | Users | Free | Pro (4%) | Pro MRR | Cumulative |
-| ----- | ----- | ---- | -------- | ------- | ---------- |
-| 1 | 50 | 48 | 2 | EUR 54 | EUR 54 |
-| 3 | 85 | 81 | 7 | EUR 189 | EUR 351 |
-| 6 | 186 | 177 | 19 | EUR 513 | EUR 1,512 |
-| 12 | 901 | 856 | 103 | EUR 2,781 | EUR 10,989 |
+| Month | Users | Free | Pro (4%) | Pro MRR   | Cumulative |
+| ----- | ----- | ---- | -------- | --------- | ---------- |
+| 1     | 50    | 48   | 2        | EUR 54    | EUR 54     |
+| 3     | 85    | 81   | 7        | EUR 189   | EUR 351    |
+| 6     | 186   | 177  | 19       | EUR 513   | EUR 1,512  |
+| 12    | 901   | 856  | 103      | EUR 2,781 | EUR 10,989 |
 
 ### 2.5 Referral Metrics
 
 **Purpose**: Measure organic growth and word-of-mouth effectiveness.
 
-| Metric | Formula | Data Source | Update Frequency | Target | Alert Threshold |
-| ------ | ------- | ----------- | ---------------- | ------ | --------------- |
-| **NPS (Net Promoter Score)** | % Promoters (9-10) - % Detractors (0-6) | In-app Survey | Monthly | >30 | <10 |
-| **K-factor (Viral Coefficient)** | Invites per user * Invite conversion rate | Database | Monthly | 0.3 (NOW), 1.1 (LATER) | <0.1 |
-| **Referral Participation Rate** | Users who referred / Total users * 100 | Database | Monthly | 15% | <5% |
-| **Referral Conversion Rate** | Referred signups / Referrals sent * 100 | Database | Monthly | 20% | <10% |
-| **Organic Sharing Rate** | Proposals shared (no referral code) / Proposals published * 100 | PostHog | Monthly | 30% | <10% |
-| **"Made with Spons Easy" Clicks** | Clicks on proposal footer link / Proposal views * 100 | PostHog | Weekly | 5% | <2% |
+| Metric                            | Formula                                                          | Data Source   | Update Frequency | Target                 | Alert Threshold |
+| --------------------------------- | ---------------------------------------------------------------- | ------------- | ---------------- | ---------------------- | --------------- |
+| **NPS (Net Promoter Score)**      | % Promoters (9-10) - % Detractors (0-6)                          | In-app Survey | Monthly          | >30                    | <10             |
+| **K-factor (Viral Coefficient)**  | Invites per user \* Invite conversion rate                       | Database      | Monthly          | 0.3 (NOW), 1.1 (LATER) | <0.1            |
+| **Referral Participation Rate**   | Users who referred / Total users \* 100                          | Database      | Monthly          | 15%                    | <5%             |
+| **Referral Conversion Rate**      | Referred signups / Referrals sent \* 100                         | Database      | Monthly          | 20%                    | <10%            |
+| **Organic Sharing Rate**          | Proposals shared (no referral code) / Proposals published \* 100 | PostHog       | Monthly          | 30%                    | <10%            |
+| **"Made with Spons Easy" Clicks** | Clicks on proposal footer link / Proposal views \* 100           | PostHog       | Weekly           | 5%                     | <2%             |
 
 ---
 
@@ -246,16 +262,19 @@ Proposal Published (30%) -- Target: 40% (North Star Driver)
 **Sections**:
 
 1. **Activation Funnel**
+
    - Visual funnel chart: Signup -> Dashboard -> Create -> Publish
    - Conversion rates between each step
    - Week-over-week comparison
 
 2. **User Engagement**
+
    - DAU/WAU/MAU trend lines
    - Stickiness (DAU/MAU) over time
    - Feature usage heatmap
 
 3. **Core Loop Performance**
+
    - Proposals created vs published (ratio)
    - Tiers added per proposal (avg)
    - Leads received per published proposal (avg)
@@ -273,16 +292,19 @@ Proposal Published (30%) -- Target: 40% (North Star Driver)
 **Sections**:
 
 1. **Acquisition Channels**
+
    - Traffic by source (stacked area chart)
    - CAC by channel (bar chart)
    - Conversion rate by channel (table)
 
 2. **Funnel Analytics**
+
    - Visitor -> Signup conversion
    - Signup -> Activated conversion
    - Free -> Paid conversion
 
 3. **Cohort Analysis**
+
    - Retention curves by cohort
    - Revenue by cohort
    - Behavior patterns by acquisition source
@@ -299,17 +321,20 @@ Proposal Published (30%) -- Target: 40% (North Star Driver)
 **Sections**:
 
 1. **Revenue Overview**
+
    - MRR waterfall (Starting + New + Expansion - Churned = Ending)
    - ARR trend line
    - Revenue by plan tier
 
 2. **Unit Economics**
+
    - LTV calculation breakdown
    - CAC trend over time
    - LTV:CAC ratio trend
    - Payback period trend
 
 3. **Subscription Analytics**
+
    - New subscriptions
    - Upgrades/downgrades
    - Cancellations (with reasons)
@@ -329,49 +354,49 @@ Proposal Published (30%) -- Target: 40% (North Star Driver)
 
 #### Website Visitors
 
-| Attribute | Value |
-| --------- | ----- |
-| **Definition** | Count of unique browser sessions visiting any Spons Easy page |
-| **Formula** | `COUNT(DISTINCT session_id WHERE timestamp IN period)` |
-| **Data Source** | Plausible Analytics / PostHog |
-| **Update Frequency** | Real-time (dashboard), Daily (reports) |
-| **Benchmark** | SaaS average: 10% MoM growth |
-| **Target** | 500/month (M1), 1,000/month (M3), 5,000/month (M12) |
+| Attribute            | Value                                                         |
+| -------------------- | ------------------------------------------------------------- |
+| **Definition**       | Count of unique browser sessions visiting any Spons Easy page |
+| **Formula**          | `COUNT(DISTINCT session_id WHERE timestamp IN period)`        |
+| **Data Source**      | Plausible Analytics / PostHog                                 |
+| **Update Frequency** | Real-time (dashboard), Daily (reports)                        |
+| **Benchmark**        | SaaS average: 10% MoM growth                                  |
+| **Target**           | 500/month (M1), 1,000/month (M3), 5,000/month (M12)           |
 
 #### Registration Conversion Rate
 
-| Attribute | Value |
-| --------- | ----- |
-| **Definition** | Percentage of website visitors who complete registration |
-| **Formula** | `(Registrations / Unique Visitors) * 100` |
-| **Data Source** | Plausible + Database (joined on session ID) |
-| **Update Frequency** | Weekly |
-| **Benchmark** | SaaS landing page: 2-5% |
-| **Target** | 3% (cold traffic), 10% (warm traffic from communities) |
+| Attribute            | Value                                                    |
+| -------------------- | -------------------------------------------------------- |
+| **Definition**       | Percentage of website visitors who complete registration |
+| **Formula**          | `(Registrations / Unique Visitors) * 100`                |
+| **Data Source**      | Plausible + Database (joined on session ID)              |
+| **Update Frequency** | Weekly                                                   |
+| **Benchmark**        | SaaS landing page: 2-5%                                  |
+| **Target**           | 3% (cold traffic), 10% (warm traffic from communities)   |
 
 #### Customer Acquisition Cost (CAC)
 
-| Attribute | Value |
-| --------- | ----- |
-| **Definition** | Average cost to acquire one paying customer |
-| **Formula** | `Total Sales & Marketing Spend / New Paying Customers` |
-| **Data Source** | Finance (spend) + Stripe (customers) |
-| **Update Frequency** | Monthly |
-| **Benchmark** | B2C SaaS: EUR 50-200; B2B SaaS: EUR 200-500 |
-| **Target** | EUR 0-10 (NOW organic), EUR 30-50 (NEXT with paid) |
+| Attribute            | Value                                                  |
+| -------------------- | ------------------------------------------------------ |
+| **Definition**       | Average cost to acquire one paying customer            |
+| **Formula**          | `Total Sales & Marketing Spend / New Paying Customers` |
+| **Data Source**      | Finance (spend) + Stripe (customers)                   |
+| **Update Frequency** | Monthly                                                |
+| **Benchmark**        | B2C SaaS: EUR 50-200; B2B SaaS: EUR 200-500            |
+| **Target**           | EUR 0-10 (NOW organic), EUR 30-50 (NEXT with paid)     |
 
 ### 4.2 Activation Metrics
 
 #### Activation Rate
 
-| Attribute | Value |
-| --------- | ----- |
-| **Definition** | Percentage of signups who publish at least one proposal |
-| **Formula** | `(Users with published_proposals >= 1 / Total Users) * 100` |
-| **Data Source** | Database (users + proposals tables) |
-| **Update Frequency** | Daily |
-| **Benchmark** | SaaS average: 20-40% |
-| **Target** | 40% |
+| Attribute            | Value                                                       |
+| -------------------- | ----------------------------------------------------------- |
+| **Definition**       | Percentage of signups who publish at least one proposal     |
+| **Formula**          | `(Users with published_proposals >= 1 / Total Users) * 100` |
+| **Data Source**      | Database (users + proposals tables)                         |
+| **Update Frequency** | Daily                                                       |
+| **Benchmark**        | SaaS average: 20-40%                                        |
+| **Target**           | 40%                                                         |
 
 **SQL Query**:
 
@@ -391,62 +416,62 @@ AND u.created_at < :end_date;
 
 #### Time to First Proposal
 
-| Attribute | Value |
-| --------- | ----- |
-| **Definition** | Average time from user registration to first proposal creation |
-| **Formula** | `AVG(first_proposal.created_at - user.created_at)` |
-| **Data Source** | Database |
-| **Update Frequency** | Weekly |
-| **Benchmark** | Best-in-class PLG: <5 minutes |
-| **Target** | <10 minutes (median), <5 minutes (p25) |
+| Attribute            | Value                                                          |
+| -------------------- | -------------------------------------------------------------- |
+| **Definition**       | Average time from user registration to first proposal creation |
+| **Formula**          | `AVG(first_proposal.created_at - user.created_at)`             |
+| **Data Source**      | Database                                                       |
+| **Update Frequency** | Weekly                                                         |
+| **Benchmark**        | Best-in-class PLG: <5 minutes                                  |
+| **Target**           | <10 minutes (median), <5 minutes (p25)                         |
 
 ### 4.3 Retention Metrics
 
 #### Week 1 Retention
 
-| Attribute | Value |
-| --------- | ----- |
-| **Definition** | Percentage of users who return and perform an action within 7 days of signup |
-| **Formula** | `(Users with activity in days 1-7 / Users who signed up) * 100` |
-| **Data Source** | PostHog events / Database activity logs |
-| **Update Frequency** | Weekly |
-| **Benchmark** | SaaS average: 40-60% |
-| **Target** | 50% |
+| Attribute            | Value                                                                        |
+| -------------------- | ---------------------------------------------------------------------------- |
+| **Definition**       | Percentage of users who return and perform an action within 7 days of signup |
+| **Formula**          | `(Users with activity in days 1-7 / Users who signed up) * 100`              |
+| **Data Source**      | PostHog events / Database activity logs                                      |
+| **Update Frequency** | Weekly                                                                       |
+| **Benchmark**        | SaaS average: 40-60%                                                         |
+| **Target**           | 50%                                                                          |
 
 #### Monthly Churn Rate
 
-| Attribute | Value |
-| --------- | ----- |
-| **Definition** | Percentage of paying customers who cancel in a given month |
-| **Formula** | `(Customers lost this month / Customers at start of month) * 100` |
-| **Data Source** | Stripe subscription events |
-| **Update Frequency** | Monthly |
-| **Benchmark** | B2C SaaS: 5-10%; B2B SaaS: 2-5% |
-| **Target** | <8% (monthly), <5% (target for NEXT phase) |
+| Attribute            | Value                                                             |
+| -------------------- | ----------------------------------------------------------------- |
+| **Definition**       | Percentage of paying customers who cancel in a given month        |
+| **Formula**          | `(Customers lost this month / Customers at start of month) * 100` |
+| **Data Source**      | Stripe subscription events                                        |
+| **Update Frequency** | Monthly                                                           |
+| **Benchmark**        | B2C SaaS: 5-10%; B2B SaaS: 2-5%                                   |
+| **Target**           | <8% (monthly), <5% (target for NEXT phase)                        |
 
 #### DAU/MAU (Stickiness)
 
-| Attribute | Value |
-| --------- | ----- |
-| **Definition** | Ratio of daily active users to monthly active users, indicating product stickiness |
-| **Formula** | `(DAU / MAU) * 100` |
-| **Data Source** | PostHog / Database |
-| **Update Frequency** | Weekly |
-| **Benchmark** | Excellent: >25%; Good: 15-25%; Needs work: <15% |
-| **Target** | >20% |
+| Attribute            | Value                                                                              |
+| -------------------- | ---------------------------------------------------------------------------------- |
+| **Definition**       | Ratio of daily active users to monthly active users, indicating product stickiness |
+| **Formula**          | `(DAU / MAU) * 100`                                                                |
+| **Data Source**      | PostHog / Database                                                                 |
+| **Update Frequency** | Weekly                                                                             |
+| **Benchmark**        | Excellent: >25%; Good: 15-25%; Needs work: <15%                                    |
+| **Target**           | >20%                                                                               |
 
 ### 4.4 Revenue Metrics
 
 #### Monthly Recurring Revenue (MRR)
 
-| Attribute | Value |
-| --------- | ----- |
-| **Definition** | Predictable monthly revenue from active subscriptions |
-| **Formula** | `SUM(subscription.price WHERE subscription.status = 'active')` |
-| **Data Source** | Stripe |
-| **Update Frequency** | Daily |
-| **Benchmark** | Early-stage: EUR 1K-10K; Growth: EUR 10K-100K |
-| **Target** | EUR 2,781 by Month 12 |
+| Attribute            | Value                                                          |
+| -------------------- | -------------------------------------------------------------- |
+| **Definition**       | Predictable monthly revenue from active subscriptions          |
+| **Formula**          | `SUM(subscription.price WHERE subscription.status = 'active')` |
+| **Data Source**      | Stripe                                                         |
+| **Update Frequency** | Daily                                                          |
+| **Benchmark**        | Early-stage: EUR 1K-10K; Growth: EUR 10K-100K                  |
+| **Target**           | EUR 2,781 by Month 12                                          |
 
 **MRR Components**:
 
@@ -463,14 +488,14 @@ Where:
 
 #### Customer Lifetime Value (LTV)
 
-| Attribute | Value |
-| --------- | ----- |
-| **Definition** | Total revenue expected from a customer over their lifetime |
-| **Formula** | `ARPU * Customer Lifetime` where `Customer Lifetime = 1 / Monthly Churn Rate` |
-| **Data Source** | Calculated from Stripe data |
-| **Update Frequency** | Monthly |
-| **Benchmark** | Healthy SaaS: LTV > 3x CAC |
-| **Target** | EUR 540 (based on EUR 27 ARPU, 5% churn = 20 months) |
+| Attribute            | Value                                                                         |
+| -------------------- | ----------------------------------------------------------------------------- |
+| **Definition**       | Total revenue expected from a customer over their lifetime                    |
+| **Formula**          | `ARPU * Customer Lifetime` where `Customer Lifetime = 1 / Monthly Churn Rate` |
+| **Data Source**      | Calculated from Stripe data                                                   |
+| **Update Frequency** | Monthly                                                                       |
+| **Benchmark**        | Healthy SaaS: LTV > 3x CAC                                                    |
+| **Target**           | EUR 540 (based on EUR 27 ARPU, 5% churn = 20 months)                          |
 
 **LTV Calculation Example**:
 
@@ -485,14 +510,14 @@ LTV = EUR 27 * 20 = EUR 540
 
 #### Net Promoter Score (NPS)
 
-| Attribute | Value |
-| --------- | ----- |
-| **Definition** | Measure of customer loyalty and likelihood to recommend |
-| **Formula** | `% Promoters (9-10) - % Detractors (0-6)` |
-| **Data Source** | In-app NPS survey (triggered after 3rd proposal or 14 days) |
-| **Update Frequency** | Monthly |
-| **Benchmark** | SaaS average: 30-40; Excellent: >50 |
-| **Target** | >30 |
+| Attribute            | Value                                                       |
+| -------------------- | ----------------------------------------------------------- |
+| **Definition**       | Measure of customer loyalty and likelihood to recommend     |
+| **Formula**          | `% Promoters (9-10) - % Detractors (0-6)`                   |
+| **Data Source**      | In-app NPS survey (triggered after 3rd proposal or 14 days) |
+| **Update Frequency** | Monthly                                                     |
+| **Benchmark**        | SaaS average: 30-40; Excellent: >50                         |
+| **Target**           | >30                                                         |
 
 **NPS Survey Trigger**:
 
@@ -502,14 +527,14 @@ LTV = EUR 27 * 20 = EUR 540
 
 #### Viral Coefficient (K-Factor)
 
-| Attribute | Value |
-| --------- | ----- |
-| **Definition** | Average number of new users each existing user generates |
-| **Formula** | `(Avg invites per user) * (Invite conversion rate)` |
-| **Data Source** | Database (referrals table) |
-| **Update Frequency** | Monthly |
-| **Benchmark** | Viral: >1.0; Good: 0.5-1.0; Normal: <0.5 |
-| **Target** | 0.3 (NOW), 0.5 (NEXT), 1.1 (LATER) |
+| Attribute            | Value                                                    |
+| -------------------- | -------------------------------------------------------- |
+| **Definition**       | Average number of new users each existing user generates |
+| **Formula**          | `(Avg invites per user) * (Invite conversion rate)`      |
+| **Data Source**      | Database (referrals table)                               |
+| **Update Frequency** | Monthly                                                  |
+| **Benchmark**        | Viral: >1.0; Good: 0.5-1.0; Normal: <0.5                 |
+| **Target**           | 0.3 (NOW), 0.5 (NEXT), 1.1 (LATER)                       |
 
 ---
 
@@ -517,40 +542,40 @@ LTV = EUR 27 * 20 = EUR 540
 
 ### 5.1 Threshold Definitions
 
-| Metric | Green (On Track) | Yellow (Needs Attention) | Red (Critical) |
-| ------ | ---------------- | ------------------------ | -------------- |
-| **Activation Rate** | >35% | 20-35% | <20% |
-| **Week 1 Retention** | >45% | 30-45% | <30% |
-| **NPS** | >30 | 10-30 | <10 |
-| **Monthly Churn** | <5% | 5-10% | >10% |
-| **LTV:CAC** | >3:1 | 2:1-3:1 | <2:1 |
-| **CAC Payback** | <12 mo | 12-18 mo | >18 mo |
-| **MRR Growth** | >20% MoM | 10-20% MoM | <10% MoM |
-| **Page Load (Desktop)** | <2s | 2-3s | >3s |
-| **Preview Update** | <300ms | 300-500ms | >500ms |
-| **PDF Generation** | <5s | 5-10s | >10s |
+| Metric                  | Green (On Track) | Yellow (Needs Attention) | Red (Critical) |
+| ----------------------- | ---------------- | ------------------------ | -------------- |
+| **Activation Rate**     | >35%             | 20-35%                   | <20%           |
+| **Week 1 Retention**    | >45%             | 30-45%                   | <30%           |
+| **NPS**                 | >30              | 10-30                    | <10            |
+| **Monthly Churn**       | <5%              | 5-10%                    | >10%           |
+| **LTV:CAC**             | >3:1             | 2:1-3:1                  | <2:1           |
+| **CAC Payback**         | <12 mo           | 12-18 mo                 | >18 mo         |
+| **MRR Growth**          | >20% MoM         | 10-20% MoM               | <10% MoM       |
+| **Page Load (Desktop)** | <2s              | 2-3s                     | >3s            |
+| **Preview Update**      | <300ms           | 300-500ms                | >500ms         |
+| **PDF Generation**      | <5s              | 5-10s                    | >10s           |
 
 ### 5.2 Alert Triggers
 
 #### Critical Alerts (Immediate Action Required)
 
-| Alert | Trigger | Channel | Escalation |
-| ----- | ------- | ------- | ---------- |
-| **Activation Collapse** | Activation Rate <15% for 3 days | Slack + Email | Founder + Product Lead |
-| **Churn Spike** | Churn >15% in any month | Email | Founder + CS Lead |
-| **System Down** | Health check fails for 5 minutes | PagerDuty | Engineering Lead |
-| **Revenue Drop** | MRR drops >10% MoM | Email | Founder |
-| **NPS Crash** | NPS <0 | Email | Product Lead |
+| Alert                   | Trigger                          | Channel       | Escalation             |
+| ----------------------- | -------------------------------- | ------------- | ---------------------- |
+| **Activation Collapse** | Activation Rate <15% for 3 days  | Slack + Email | Founder + Product Lead |
+| **Churn Spike**         | Churn >15% in any month          | Email         | Founder + CS Lead      |
+| **System Down**         | Health check fails for 5 minutes | PagerDuty     | Engineering Lead       |
+| **Revenue Drop**        | MRR drops >10% MoM               | Email         | Founder                |
+| **NPS Crash**           | NPS <0                           | Email         | Product Lead           |
 
 #### Warning Alerts (Review Required)
 
-| Alert | Trigger | Channel | Review By |
-| ----- | ------- | ------- | --------- |
-| **Low Activation** | Activation Rate <25% for 7 days | Slack | Product Team (Weekly) |
-| **High Churn** | Churn >8% in any month | Slack | CS Lead (Weekly) |
-| **CAC Creeping** | CAC increases >30% MoM | Email | Growth Lead (Monthly) |
-| **Conversion Drop** | Free-to-Paid <2% | Slack | Product Team (Weekly) |
-| **Performance Degradation** | Page load >2.5s (p95) | Slack | Engineering (Daily) |
+| Alert                       | Trigger                         | Channel | Review By             |
+| --------------------------- | ------------------------------- | ------- | --------------------- |
+| **Low Activation**          | Activation Rate <25% for 7 days | Slack   | Product Team (Weekly) |
+| **High Churn**              | Churn >8% in any month          | Slack   | CS Lead (Weekly)      |
+| **CAC Creeping**            | CAC increases >30% MoM          | Email   | Growth Lead (Monthly) |
+| **Conversion Drop**         | Free-to-Paid <2%                | Slack   | Product Team (Weekly) |
+| **Performance Degradation** | Page load >2.5s (p95)           | Slack   | Engineering (Daily)   |
 
 ### 5.3 Escalation Paths
 
@@ -573,14 +598,14 @@ Level 4: Emergency Team Meeting (72h if unresolved or critical)
 
 ### 6.1 Recommended Analytics Stack
 
-| Layer | Tool | Purpose | Cost | Priority |
-| ----- | ---- | ------- | ---- | -------- |
-| **Product Analytics** | PostHog (Recommended) | Events, funnels, session replay, feature flags | Free <1M events/mo | P1 |
-| **Web Analytics** | Plausible | Privacy-friendly traffic analytics | EUR 9/mo | P1 |
-| **Revenue Analytics** | Stripe Dashboard + Baremetrics | Subscription metrics, MRR tracking | Stripe free, Baremetrics EUR 50/mo | P2 |
-| **Dashboard** | Notion / Google Sheets | Consolidated KPI views | Free | P1 |
-| **Alerting** | Slack + Zapier | Automated notifications | Free-EUR 20/mo | P2 |
-| **BI (Future)** | Metabase | Advanced analysis, custom queries | Free (self-hosted) | P3 |
+| Layer                 | Tool                           | Purpose                                        | Cost                               | Priority |
+| --------------------- | ------------------------------ | ---------------------------------------------- | ---------------------------------- | -------- |
+| **Product Analytics** | PostHog (Recommended)          | Events, funnels, session replay, feature flags | Free <1M events/mo                 | P1       |
+| **Web Analytics**     | Plausible                      | Privacy-friendly traffic analytics             | EUR 9/mo                           | P1       |
+| **Revenue Analytics** | Stripe Dashboard + Baremetrics | Subscription metrics, MRR tracking             | Stripe free, Baremetrics EUR 50/mo | P2       |
+| **Dashboard**         | Notion / Google Sheets         | Consolidated KPI views                         | Free                               | P1       |
+| **Alerting**          | Slack + Zapier                 | Automated notifications                        | Free-EUR 20/mo                     | P2       |
+| **BI (Future)**       | Metabase                       | Advanced analysis, custom queries              | Free (self-hosted)                 | P3       |
 
 **Why PostHog**:
 
@@ -594,40 +619,40 @@ Level 4: Emergency Team Meeting (72h if unresolved or critical)
 
 #### Critical Events (Must Track from Day 1)
 
-| Event Name | Trigger | Properties | Purpose |
-| ---------- | ------- | ---------- | ------- |
-| `user_registered` | Account creation | `user_id`, `source`, `utm_*` | Acquisition |
-| `user_logged_in` | Login success | `user_id`, `method` | Retention |
-| `proposal_created` | Create proposal clicked | `user_id`, `proposal_id` | Activation |
-| `proposal_saved` | First save/autosave | `user_id`, `proposal_id`, `tier_count` | Engagement |
-| `tier_added` | Tier created | `proposal_id`, `tier_position` | Engagement |
-| `benefit_added` | Benefit added to tier | `proposal_id`, `tier_id` | Engagement |
-| `proposal_published` | Publish button clicked | `user_id`, `proposal_id`, `tier_count` | North Star |
-| `proposal_unpublished` | Unpublish clicked | `user_id`, `proposal_id` | Churn signal |
-| `proposal_viewed` | Public proposal loaded | `proposal_id`, `referrer`, `is_unique` | Engagement |
-| `lead_submitted` | Contact form submitted | `proposal_id`, `tier_interested` | Conversion |
-| `pdf_exported` | PDF download initiated | `proposal_id`, `user_id` | Feature usage |
+| Event Name             | Trigger                 | Properties                             | Purpose       |
+| ---------------------- | ----------------------- | -------------------------------------- | ------------- |
+| `user_registered`      | Account creation        | `user_id`, `source`, `utm_*`           | Acquisition   |
+| `user_logged_in`       | Login success           | `user_id`, `method`                    | Retention     |
+| `proposal_created`     | Create proposal clicked | `user_id`, `proposal_id`               | Activation    |
+| `proposal_saved`       | First save/autosave     | `user_id`, `proposal_id`, `tier_count` | Engagement    |
+| `tier_added`           | Tier created            | `proposal_id`, `tier_position`         | Engagement    |
+| `benefit_added`        | Benefit added to tier   | `proposal_id`, `tier_id`               | Engagement    |
+| `proposal_published`   | Publish button clicked  | `user_id`, `proposal_id`, `tier_count` | North Star    |
+| `proposal_unpublished` | Unpublish clicked       | `user_id`, `proposal_id`               | Churn signal  |
+| `proposal_viewed`      | Public proposal loaded  | `proposal_id`, `referrer`, `is_unique` | Engagement    |
+| `lead_submitted`       | Contact form submitted  | `proposal_id`, `tier_interested`       | Conversion    |
+| `pdf_exported`         | PDF download initiated  | `proposal_id`, `user_id`               | Feature usage |
 
 #### Secondary Events (Track in Phase 2)
 
-| Event Name | Trigger | Properties | Purpose |
-| ---------- | ------- | ---------- | ------- |
-| `design_settings_changed` | Settings saved | `proposal_id`, `setting_type` | Feature usage |
-| `lead_status_updated` | Status dropdown changed | `lead_id`, `from_status`, `to_status` | CRM usage |
-| `referral_link_shared` | Share button clicked | `user_id`, `channel` | Virality |
-| `upgrade_clicked` | Upgrade CTA clicked | `user_id`, `source_page` | Monetization |
-| `subscription_started` | Stripe webhook | `user_id`, `plan`, `amount` | Revenue |
-| `subscription_cancelled` | Stripe webhook | `user_id`, `reason`, `tenure` | Churn analysis |
+| Event Name                | Trigger                 | Properties                            | Purpose        |
+| ------------------------- | ----------------------- | ------------------------------------- | -------------- |
+| `design_settings_changed` | Settings saved          | `proposal_id`, `setting_type`         | Feature usage  |
+| `lead_status_updated`     | Status dropdown changed | `lead_id`, `from_status`, `to_status` | CRM usage      |
+| `referral_link_shared`    | Share button clicked    | `user_id`, `channel`                  | Virality       |
+| `upgrade_clicked`         | Upgrade CTA clicked     | `user_id`, `source_page`              | Monetization   |
+| `subscription_started`    | Stripe webhook          | `user_id`, `plan`, `amount`           | Revenue        |
+| `subscription_cancelled`  | Stripe webhook          | `user_id`, `reason`, `tenure`         | Churn analysis |
 
 #### Page Views (Auto-tracked by PostHog)
 
-| Page | Path | Key Insights |
-| ---- | ---- | ------------ |
-| Home | `/` | Landing page effectiveness |
-| Dashboard | `/dashboard` | User engagement |
-| Proposal Builder | `/proposals/:id/edit` | Core feature usage |
-| Public Proposal | `/p/:slug` | Lead generation |
-| Pricing | `/pricing` | Monetization intent |
+| Page             | Path                  | Key Insights               |
+| ---------------- | --------------------- | -------------------------- |
+| Home             | `/`                   | Landing page effectiveness |
+| Dashboard        | `/dashboard`          | User engagement            |
+| Proposal Builder | `/proposals/:id/edit` | Core feature usage         |
+| Public Proposal  | `/p/:slug`            | Lead generation            |
+| Pricing          | `/pricing`            | Monetization intent        |
 
 ### 6.3 PostHog Implementation
 
@@ -703,13 +728,101 @@ posthog.capture('proposal_published', {
 
 ### 6.5 Dashboard Update Cadence
 
-| Dashboard | Update Frequency | Owner | Meeting |
-| --------- | ---------------- | ----- | ------- |
-| **Real-time** (DAU, Active Users) | Real-time | Engineering | - |
-| **Daily** (Signups, Proposals, Leads) | Every morning | Product | Daily standup |
-| **Weekly** (Retention, Conversion, NPS) | Monday AM | Growth | Weekly review |
-| **Monthly** (MRR, LTV, CAC, Cohorts) | 1st of month | Founder | Monthly review |
-| **Quarterly** (Strategic health, PMF) | End of quarter | Leadership | Board prep |
+| Dashboard                               | Update Frequency | Owner       | Meeting        |
+| --------------------------------------- | ---------------- | ----------- | -------------- |
+| **Real-time** (DAU, Active Users)       | Real-time (SSE)  | Engineering | -              |
+| **Daily** (Signups, Proposals, Leads)   | Every morning    | Product     | Daily standup  |
+| **Weekly** (Retention, Conversion, NPS) | Monday AM        | Growth      | Weekly review  |
+| **Monthly** (MRR, LTV, CAC, Cohorts)    | 1st of month     | Founder     | Monthly review |
+| **Quarterly** (Strategic health, PMF)   | End of quarter   | Leadership  | Board prep     |
+
+### 6.6 Technical Implementation (Implemented)
+
+**Cache Architecture**:
+
+The admin dashboard uses a two-tier cache system for optimal performance:
+
+| Layer  | Technology             | Purpose                  | TTL      |
+| ------ | ---------------------- | ------------------------ | -------- |
+| **L1** | In-memory (BentoCache) | Ultra-fast local cache   | 30s-2min |
+| **L2** | Upstash Redis (EU)     | Persistent, shared cache | 30s-2min |
+
+**Cache Configuration**:
+
+- **Database ID**: `ab913a61-4525-4d40-bd68-7011c9d3be0b`
+- **Region**: `eu-west-1`
+- **Endpoint**: `internal-stinkbug-28683.upstash.io`
+- **Console**: https://console.upstash.com/redis/ab913a61-4525-4d40-bd68-7011c9d3be0b
+
+**TTL Strategy**:
+
+| Data Type              | TTL   | Rationale                      |
+| ---------------------- | ----- | ------------------------------ |
+| Dashboard (complete)   | 1 min | Balance freshness/performance  |
+| Overview metrics       | 2 min | Aggregated data changes slowly |
+| Chart data             | 1 min | Historical data                |
+| Recent users/proposals | 30s   | Dynamic data                   |
+
+**Cache Invalidation**:
+
+Automatic invalidation via Lucid ORM hooks:
+
+- `@afterCreate`, `@afterUpdate`, `@afterDelete` on User model
+- `@afterCreate`, `@afterUpdate`, `@afterDelete` on Proposal model
+
+**Performance Results**:
+
+| Period   | Without Cache | With Cache | Improvement   |
+| -------- | ------------- | ---------- | ------------- |
+| 7 days   | 175ms         | 25-30ms    | **6x faster** |
+| 365 days | 57ms          | 25-30ms    | **2x faster** |
+
+**Real-time Updates**:
+
+Using AdonisJS Transmit (SSE) for live dashboard updates:
+
+- Channel: `admin/metrics`
+- Ping interval: 30s
+- Auto-reconnect enabled
+
+**Database Indexes**:
+
+Optimized indexes for metrics queries:
+
+- `idx_users_created_at_desc` - Period filters on users
+- `idx_proposals_status_created_at` - Combined status + period filters
+- `idx_proposals_user_id_status` - Activation queries
+- `idx_leads_status_created_at` - Conversion metrics
+
+**Dynamic Target System**:
+
+The North Star Metric targets automatically scale based on the selected period:
+
+```typescript
+// Weekly target (base metric)
+WEEKLY_PROPOSAL_TARGET = 100;
+
+// Dynamic calculation
+calculatePeriodTarget(period) {
+  const days = getPeriodDays(period);
+  return Math.round((WEEKLY_PROPOSAL_TARGET / 7) * days);
+}
+```
+
+| Period     | Days | Target |
+| ---------- | ---- | ------ |
+| 7 days     | 7    | 100    |
+| 15 days    | 15   | 214    |
+| 30 days    | 30   | 429    |
+| 90 days    | 90   | 1,286  |
+| 180 days   | 180  | 2,571  |
+| 365 days   | 365  | 5,214  |
+| All (10yr) | 3650 | 52,143 |
+
+**Related Documentation**:
+
+- [Cache Architecture](/Users/leobrival/Developer/sass/spons-easy/specs/002-admin-dashboard/contracts/cache-architecture.md)
+- [Admin Dashboard Spec](/Users/leobrival/Developer/sass/spons-easy/specs/002-admin-dashboard/spec.md)
 
 ---
 
@@ -719,14 +832,14 @@ posthog.capture('proposal_published', {
 
 **Phase: NOW (MVP Validation)**
 
-| Metric | Target | Current | Weight | Weighted Score |
-| ------ | ------ | ------- | ------ | -------------- |
-| NPS | >30 | - | 25% | - |
-| Activation Rate | >40% | - | 25% | - |
-| Week 1 Retention | >50% | - | 20% | - |
-| Proposals Published | 30 | - | 15% | - |
-| Time to Value | <5 min | - | 15% | - |
-| **PMF Score** | - | - | 100% | **-/100** |
+| Metric              | Target | Current | Weight | Weighted Score |
+| ------------------- | ------ | ------- | ------ | -------------- |
+| NPS                 | >30    | -       | 25%    | -              |
+| Activation Rate     | >40%   | -       | 25%    | -              |
+| Week 1 Retention    | >50%   | -       | 20%    | -              |
+| Proposals Published | 30     | -       | 15%    | -              |
+| Time to Value       | <5 min | -       | 15%    | -              |
+| **PMF Score**       | -      | -       | 100%   | **-/100**      |
 
 **Scoring**:
 
@@ -744,27 +857,27 @@ posthog.capture('proposal_published', {
 
 **Phase 1: BEFORE (Prospects)**
 
-| Square | Metric | Target | How to Measure |
-| ------ | ------ | ------ | -------------- |
-| **1. Target Market** | ICP Match Rate | >70% | Lead qualification form |
-| **2. Message** | Landing Page CVR | >5% | Plausible/PostHog |
-| **3. Media** | Traffic by Channel | Balanced | Plausible UTMs |
+| Square               | Metric             | Target   | How to Measure          |
+| -------------------- | ------------------ | -------- | ----------------------- |
+| **1. Target Market** | ICP Match Rate     | >70%     | Lead qualification form |
+| **2. Message**       | Landing Page CVR   | >5%      | Plausible/PostHog       |
+| **3. Media**         | Traffic by Channel | Balanced | Plausible UTMs          |
 
 **Phase 2: DURING (Leads)**
 
-| Square | Metric | Target | How to Measure |
-| ------ | ------ | ------ | -------------- |
-| **4. Lead Capture** | Waitlist/Signup CVR | >3% | Database |
-| **5. Lead Nurture** | Email Open Rate | >35% | Email provider |
-| **6. Sales Conversion** | Activation Rate | >40% | PostHog funnel |
+| Square                  | Metric              | Target | How to Measure |
+| ----------------------- | ------------------- | ------ | -------------- |
+| **4. Lead Capture**     | Waitlist/Signup CVR | >3%    | Database       |
+| **5. Lead Nurture**     | Email Open Rate     | >35%   | Email provider |
+| **6. Sales Conversion** | Activation Rate     | >40%   | PostHog funnel |
 
 **Phase 3: AFTER (Customers)**
 
-| Square | Metric | Target | How to Measure |
-| ------ | ------ | ------ | -------------- |
-| **7. WOW Experience** | NPS | >30 | In-app survey |
-| **8. Increase LTV** | Net Revenue Retention | >100% | Stripe |
-| **9. Referrals** | K-Factor | >0.3 | Database |
+| Square                | Metric                | Target | How to Measure |
+| --------------------- | --------------------- | ------ | -------------- |
+| **7. WOW Experience** | NPS                   | >30    | In-app survey  |
+| **8. Increase LTV**   | Net Revenue Retention | >100%  | Stripe         |
+| **9. Referrals**      | K-Factor              | >0.3   | Database       |
 
 ---
 
@@ -804,28 +917,33 @@ posthog.capture('proposal_published', {
 ## Weekly KPI Review - Week of [Date]
 
 ### North Star: Proposals Published
+
 - This Week: [X]
 - Last Week: [X]
 - WoW Change: [+/-X%]
 - Trend: [Up/Down/Stable]
 
 ### AARRR Summary
-| Metric | This Week | Last Week | Target | Status |
-|--------|-----------|-----------|--------|--------|
-| Signups | X | X | X | OK/WARN/CRIT |
-| Activation | X% | X% | 40% | OK/WARN/CRIT |
-| Week 1 Retention | X% | X% | 50% | OK/WARN/CRIT |
-| NPS | X | X | >30 | OK/WARN/CRIT |
+
+| Metric           | This Week | Last Week | Target | Status       |
+| ---------------- | --------- | --------- | ------ | ------------ |
+| Signups          | X         | X         | X      | OK/WARN/CRIT |
+| Activation       | X%        | X%        | 40%    | OK/WARN/CRIT |
+| Week 1 Retention | X%        | X%        | 50%    | OK/WARN/CRIT |
+| NPS              | X         | X         | >30    | OK/WARN/CRIT |
 
 ### Key Wins
+
 1. [Win]
 2. [Win]
 
 ### Key Challenges
+
 1. [Challenge] -> [Action]
 2. [Challenge] -> [Action]
 
 ### Action Items
+
 - [ ] [Action 1] - Owner - Due
 - [ ] [Action 2] - Owner - Due
 ```
@@ -870,24 +988,24 @@ posthog.capture('proposal_published', {
 
 **Sheet 1: Daily Metrics**
 
-| Date | Visitors | Signups | Proposals Created | Proposals Published | Leads | DAU |
-| ---- | -------- | ------- | ----------------- | ------------------- | ----- | --- |
-| 2025-12-01 | | | | | | |
-| 2025-12-02 | | | | | | |
+| Date       | Visitors | Signups | Proposals Created | Proposals Published | Leads | DAU |
+| ---------- | -------- | ------- | ----------------- | ------------------- | ----- | --- |
+| 2025-12-01 |          |         |                   |                     |       |     |
+| 2025-12-02 |          |         |                   |                     |       |     |
 
 **Sheet 2: Weekly Metrics**
 
-| Week | Signups | Activation Rate | Week 1 Retention | NPS | MRR | Churn |
-| ---- | ------- | --------------- | ---------------- | --- | --- | ----- |
-| W1 Dec | | | | | | |
-| W2 Dec | | | | | | |
+| Week   | Signups | Activation Rate | Week 1 Retention | NPS | MRR | Churn |
+| ------ | ------- | --------------- | ---------------- | --- | --- | ----- |
+| W1 Dec |         |                 |                  |     |     |       |
+| W2 Dec |         |                 |                  |     |     |       |
 
 **Sheet 3: Monthly Metrics**
 
-| Month | MAU | New MRR | Churned MRR | Net MRR | ARR | LTV:CAC | CAC Payback |
-| ----- | --- | ------- | ----------- | ------- | --- | ------- | ----------- |
-| Dec 2025 | | | | | | | |
-| Jan 2026 | | | | | | | |
+| Month    | MAU | New MRR | Churned MRR | Net MRR | ARR | LTV:CAC | CAC Payback |
+| -------- | --- | ------- | ----------- | ------- | --- | ------- | ----------- |
+| Dec 2025 |     |         |             |         |     |         |             |
+| Jan 2026 |     |         |             |         |     |         |             |
 
 ### 9.2 Notion KPI Dashboard Template
 
@@ -902,13 +1020,13 @@ posthog.capture('proposal_published', {
 
 ## Quick Stats (Today)
 
-| Metric | Value | vs Yesterday |
-|--------|-------|--------------|
-| Signups | X | +X |
-| DAU | X | +X |
-| Proposals Created | X | +X |
-| Proposals Published | X | +X |
-| Leads | X | +X |
+| Metric              | Value | vs Yesterday |
+| ------------------- | ----- | ------------ |
+| Signups             | X     | +X           |
+| DAU                 | X     | +X           |
+| Proposals Created   | X     | +X           |
+| Proposals Published | X     | +X           |
+| Leads               | X     | +X           |
 
 ---
 
@@ -921,25 +1039,30 @@ posthog.capture('proposal_published', {
 ## AARRR Funnel
 
 ### Acquisition
+
 - Visitors: X
 - Signups: X
 - Conversion: X%
 
 ### Activation
+
 - Activated Users: X
 - Activation Rate: X%
 - Time to Value: X min
 
 ### Retention
+
 - Week 1: X%
 - DAU/MAU: X%
 
 ### Revenue
+
 - MRR: EUR X
 - ARPU: EUR X
 - Paying: X users
 
 ### Referral
+
 - NPS: X
 - K-Factor: X
 
@@ -963,21 +1086,21 @@ posthog.capture('proposal_published', {
 
 ### A. Glossary
 
-| Term | Definition |
-| ---- | ---------- |
-| **AARRR** | Pirate Metrics framework: Acquisition, Activation, Retention, Revenue, Referral |
-| **Activation** | User reaching the "aha moment" (publishing first proposal) |
-| **ARR** | Annual Recurring Revenue (MRR * 12) |
-| **CAC** | Customer Acquisition Cost |
-| **Churn** | Customers who cancel or stop using the product |
-| **DAU** | Daily Active Users |
-| **K-Factor** | Viral coefficient measuring organic growth |
-| **LTV** | Customer Lifetime Value |
-| **MAU** | Monthly Active Users |
-| **MRR** | Monthly Recurring Revenue |
-| **NPS** | Net Promoter Score (-100 to +100) |
-| **PMF** | Product-Market Fit |
-| **WAU** | Weekly Active Users |
+| Term           | Definition                                                                      |
+| -------------- | ------------------------------------------------------------------------------- |
+| **AARRR**      | Pirate Metrics framework: Acquisition, Activation, Retention, Revenue, Referral |
+| **Activation** | User reaching the "aha moment" (publishing first proposal)                      |
+| **ARR**        | Annual Recurring Revenue (MRR \* 12)                                            |
+| **CAC**        | Customer Acquisition Cost                                                       |
+| **Churn**      | Customers who cancel or stop using the product                                  |
+| **DAU**        | Daily Active Users                                                              |
+| **K-Factor**   | Viral coefficient measuring organic growth                                      |
+| **LTV**        | Customer Lifetime Value                                                         |
+| **MAU**        | Monthly Active Users                                                            |
+| **MRR**        | Monthly Recurring Revenue                                                       |
+| **NPS**        | Net Promoter Score (-100 to +100)                                               |
+| **PMF**        | Product-Market Fit                                                              |
+| **WAU**        | Weekly Active Users                                                             |
 
 ### B. Metric Calculation SQL Queries
 
@@ -1030,15 +1153,15 @@ ORDER BY c.signup_week;
 
 ### C. Data Sources Reference
 
-| Data Point | Primary Source | Backup Source |
-| ---------- | -------------- | ------------- |
-| User registrations | Database (users table) | PostHog events |
-| Proposal creation | Database (proposals table) | PostHog events |
-| Page views | Plausible | PostHog pageviews |
-| Session data | PostHog | - |
-| Revenue/MRR | Stripe | - |
-| Email metrics | Resend/Mailgun | - |
-| NPS | In-app survey (custom) | - |
+| Data Point         | Primary Source             | Backup Source     |
+| ------------------ | -------------------------- | ----------------- |
+| User registrations | Database (users table)     | PostHog events    |
+| Proposal creation  | Database (proposals table) | PostHog events    |
+| Page views         | Plausible                  | PostHog pageviews |
+| Session data       | PostHog                    | -                 |
+| Revenue/MRR        | Stripe                     | -                 |
+| Email metrics      | Resend/Mailgun             | -                 |
+| NPS                | In-app survey (custom)     | -                 |
 
 ### D. Related Documents
 

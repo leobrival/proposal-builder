@@ -1,0 +1,77 @@
+{
+	"name": "spons-easy-mcp",
+	"version": "1.0.0",
+	"description": "MCP (Model Context Protocol) client for Spons Easy API - Manage sponsorship proposals with AI assistants",
+	"type": "module",
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"bin": {
+		"spons-easy-mcp": "./dist/cli.js"
+	},
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		},
+		"./mcp-server": {
+			"import": "./dist/mcp-server.js",
+			"types": "./dist/mcp-server.d.ts"
+		}
+	},
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE"
+	],
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsc --watch",
+		"lint": "biome check .",
+		"lint:fix": "biome check --write .",
+		"clean": "rm -rf dist",
+		"prepublishOnly": "pnpm run clean && pnpm run lint && pnpm run build"
+	},
+	"keywords": [
+		"spons-easy",
+		"sponseasy",
+		"mcp",
+		"model-context-protocol",
+		"api-client",
+		"sponsorship",
+		"proposals",
+		"claude",
+		"ai-assistant",
+		"claude-desktop"
+	],
+	"author": {
+		"name": "Spons Easy",
+		"email": "hello@sponseasy.com",
+		"url": "https://sponseasy.com"
+	},
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/spons-easy/mcp-client.git"
+	},
+	"homepage": "https://sponseasy.com/docs/mcp",
+	"bugs": {
+		"url": "https://github.com/spons-easy/mcp-client/issues"
+	},
+	"engines": {
+		"node": ">=18.0.0"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.0.0",
+		"@types/node": "^20.0.0",
+		"typescript": "^5.0.0"
+	},
+	"peerDependencies": {
+		"@modelcontextprotocol/sdk": ">=1.0.0"
+	},
+	"peerDependenciesMeta": {
+		"@modelcontextprotocol/sdk": {
+			"optional": true
+		}
+	}
+}

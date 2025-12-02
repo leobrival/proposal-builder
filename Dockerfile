@@ -3,13 +3,16 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
+# Set NODE_ENV to development for build (to install devDependencies)
+ENV NODE_ENV=development
+
 # Install pnpm 8 (compatible with lockfileVersion 6.0)
 RUN corepack enable && corepack prepare pnpm@8.15.0 --activate
 
 # Copy package files
 COPY package.json pnpm-lock.yaml ./
 
-# Install dependencies
+# Install ALL dependencies (including devDependencies for build)
 RUN pnpm install --frozen-lockfile
 
 # Copy source code
@@ -22,6 +25,9 @@ RUN pnpm build
 FROM node:20-alpine AS production
 
 WORKDIR /app
+
+# Set NODE_ENV to production for runtime
+ENV NODE_ENV=production
 
 # Install pnpm 8 (compatible with lockfileVersion 6.0)
 RUN corepack enable && corepack prepare pnpm@8.15.0 --activate

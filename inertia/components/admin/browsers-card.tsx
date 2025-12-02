@@ -66,7 +66,9 @@ const columns: DataCardColumn<Browser>[] = [
 		key: "sessions",
 		header: "Sessions",
 		render: (browser) => (
-			<span className="text-muted-foreground">{formatNumber(browser.sessions)}</span>
+			<span className="text-muted-foreground">
+				{formatNumber(browser.sessions)}
+			</span>
 		),
 		className: "text-right",
 	},

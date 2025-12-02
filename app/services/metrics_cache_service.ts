@@ -8,6 +8,7 @@ import type { Period } from "./metrics_service.js";
  * - Short TTL (30s-2min) to keep data relatively fresh
  * - Automatic invalidation on entity creation/modification
  * - Tags for grouped invalidation by data type
+ * - Graceful fallback when cache is unavailable
  */
 export default class MetricsCacheService {
 	// TTL by data type
@@ -40,27 +41,65 @@ export default class MetricsCacheService {
 	} as const;
 
 	/**
-	 * Builds a cache key with period
+	 * Builds a cache key with period or custom key
 	 */
-	private static buildKey(prefix: string, period: Period): string {
-		return `${prefix}:${period}`;
+	private static buildKey(
+		prefix: string,
+		periodOrKey: Period | string,
+	): string {
+		return `${prefix}:${periodOrKey}`;
+	}
+
+	/**
+	 * Safely execute cache operation with fallback to factory
+	 * If cache is unavailable, just run the factory directly
+	 */
+	private static async safeGetOrSet<T>(
+		key: string,
+		ttl: string,
+		factory: () => Promise<T>,
+		tags: string[],
+	): Promise<T> {
+		try {
+			return await cache.getOrSet({
+				key,
+				ttl,
+				factory,
+				tags,
+			});
+		} catch (error) {
+			// If cache fails (e.g., Redis unavailable), just run the factory
+			console.warn(
+				`Cache unavailable for key ${key}, fetching directly:`,
+				error instanceof Error ? error.message : error,
+			);
+			return factory();
+		}
 	}
 
 	/**
 	 * Gets or sets complete dashboard data
+	 * Accepts either a Period or a custom cache key (e.g., for date ranges)
 	 */
 	static async getOrSetDashboard<T>(
-		period: Period,
+		periodOrKey: Period | string,
 		factory: () => Promise<T>,
 	): Promise<T> {
-		const key = this.buildKey(this.PREFIX.dashboard, period);
+		const key = MetricsCacheService.buildKey(
+			MetricsCacheService.PREFIX.dashboard,
+			periodOrKey,
+		);
 
-		return cache.getOrSet({
+		return MetricsCacheService.safeGetOrSet(
 			key,
-			ttl: this.TTL.dashboard,
+			MetricsCacheService.TTL.dashboard,
 			factory,
-			tags: [this.TAGS.all, this.TAGS.users, this.TAGS.proposals],
-		});
+			[
+				MetricsCacheService.TAGS.all,
+				MetricsCacheService.TAGS.users,
+				MetricsCacheService.TAGS.proposals,
+			],
+		);
 	}
 
 	/**
@@ -70,14 +109,21 @@ export default class MetricsCacheService {
 		period: Period,
 		factory: () => Promise<T>,
 	): Promise<T> {
-		const key = this.buildKey(this.PREFIX.overview, period);
+		const key = MetricsCacheService.buildKey(
+			MetricsCacheService.PREFIX.overview,
+			period,
+		);
 
-		return cache.getOrSet({
+		return MetricsCacheService.safeGetOrSet(
 			key,
-			ttl: this.TTL.overview,
+			MetricsCacheService.TTL.overview,
 			factory,
-			tags: [this.TAGS.all, this.TAGS.users, this.TAGS.proposals],
-		});
+			[
+				MetricsCacheService.TAGS.all,
+				MetricsCacheService.TAGS.users,
+				MetricsCacheService.TAGS.proposals,
+			],
+		);
 	}
 
 	/**
@@ -87,26 +133,33 @@ export default class MetricsCacheService {
 		period: Period,
 		factory: () => Promise<T>,
 	): Promise<T> {
-		const key = this.buildKey(this.PREFIX.chartData, period);
+		const key = MetricsCacheService.buildKey(
+			MetricsCacheService.PREFIX.chartData,
+			period,
+		);
 
-		return cache.getOrSet({
+		return MetricsCacheService.safeGetOrSet(
 			key,
-			ttl: this.TTL.chartData,
+			MetricsCacheService.TTL.chartData,
 			factory,
-			tags: [this.TAGS.all, this.TAGS.users, this.TAGS.proposals],
-		});
+			[
+				MetricsCacheService.TAGS.all,
+				MetricsCacheService.TAGS.users,
+				MetricsCacheService.TAGS.proposals,
+			],
+		);
 	}
 
 	/**
 	 * Gets or sets recent users
 	 */
 	static async getOrSetRecentUsers<T>(factory: () => Promise<T>): Promise<T> {
-		return cache.getOrSet({
-			key: this.PREFIX.recentUsers,
-			ttl: this.TTL.recentUsers,
+		return MetricsCacheService.safeGetOrSet(
+			MetricsCacheService.PREFIX.recentUsers,
+			MetricsCacheService.TTL.recentUsers,
 			factory,
-			tags: [this.TAGS.all, this.TAGS.users],
-		});
+			[MetricsCacheService.TAGS.all, MetricsCacheService.TAGS.users],
+		);
 	}
 
 	/**
@@ -115,12 +168,12 @@ export default class MetricsCacheService {
 	static async getOrSetRecentProposals<T>(
 		factory: () => Promise<T>,
 	): Promise<T> {
-		return cache.getOrSet({
-			key: this.PREFIX.recentProposals,
-			ttl: this.TTL.recentProposals,
+		return MetricsCacheService.safeGetOrSet(
+			MetricsCacheService.PREFIX.recentProposals,
+			MetricsCacheService.TTL.recentProposals,
 			factory,
-			tags: [this.TAGS.all, this.TAGS.proposals],
-		});
+			[MetricsCacheService.TAGS.all, MetricsCacheService.TAGS.proposals],
+		);
 	}
 
 	/**
@@ -128,7 +181,14 @@ export default class MetricsCacheService {
 	 * Call on user creation/modification
 	 */
 	static async invalidateUsers(): Promise<void> {
-		await cache.deleteByTag({ tags: [this.TAGS.users] });
+		try {
+			await cache.deleteByTag({ tags: [MetricsCacheService.TAGS.users] });
+		} catch (error) {
+			console.warn(
+				"Failed to invalidate users cache:",
+				error instanceof Error ? error.message : error,
+			);
+		}
 	}
 
 	/**
@@ -136,7 +196,14 @@ export default class MetricsCacheService {
 	 * Call on proposal creation/modification
 	 */
 	static async invalidateProposals(): Promise<void> {
-		await cache.deleteByTag({ tags: [this.TAGS.proposals] });
+		try {
+			await cache.deleteByTag({ tags: [MetricsCacheService.TAGS.proposals] });
+		} catch (error) {
+			console.warn(
+				"Failed to invalidate proposals cache:",
+				error instanceof Error ? error.message : error,
+			);
+		}
 	}
 
 	/**
@@ -144,7 +211,14 @@ export default class MetricsCacheService {
 	 * Call on lead creation/modification
 	 */
 	static async invalidateLeads(): Promise<void> {
-		await cache.deleteByTag({ tags: [this.TAGS.leads] });
+		try {
+			await cache.deleteByTag({ tags: [MetricsCacheService.TAGS.leads] });
+		} catch (error) {
+			console.warn(
+				"Failed to invalidate leads cache:",
+				error instanceof Error ? error.message : error,
+			);
+		}
 	}
 
 	/**
@@ -152,7 +226,14 @@ export default class MetricsCacheService {
 	 * Call on major changes or to force refresh
 	 */
 	static async invalidateAll(): Promise<void> {
-		await cache.deleteByTag({ tags: [this.TAGS.all] });
+		try {
+			await cache.deleteByTag({ tags: [MetricsCacheService.TAGS.all] });
+		} catch (error) {
+			console.warn(
+				"Failed to invalidate all cache:",
+				error instanceof Error ? error.message : error,
+			);
+		}
 	}
 
 	/**

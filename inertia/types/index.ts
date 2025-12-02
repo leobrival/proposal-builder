@@ -1,7 +1,10 @@
 export interface User {
 	id: string;
 	email: string;
+	firstName: string;
+	lastName: string;
 	fullName: string;
+	isAdmin: boolean;
 }
 
 export interface SharedProps {
@@ -18,6 +21,7 @@ export interface SharedProps {
 export type ProposalStatus = "draft" | "published" | "archived";
 export type DomainStatus = "pending" | "verifying" | "verified" | "failed";
 export type SslStatus = "none" | "pending" | "active" | "failed";
+export type EventFormat = "in_person" | "online" | "hybrid";
 
 export interface DesignSettings {
 	primaryColor: string;
@@ -48,6 +52,28 @@ export interface Proposal {
 	domainStatus: DomainStatus;
 	sslStatus: SslStatus;
 	domainVerifiedAt: string | null;
+	// Event date and time
+	eventStartDate: string | null;
+	eventEndDate: string | null;
+	// Event location
+	eventVenueName: string | null;
+	eventAddress: string | null;
+	eventCity: string | null;
+	eventCountry: string | null;
+	eventLatitude: number | null;
+	eventLongitude: number | null;
+	// Event metadata
+	eventCategory: string | null;
+	eventTags: string[];
+	eventSourceUrl: string | null;
+	eventSourcePlatform: string | null;
+	eventExternalId: string | null;
+	// Organizer info
+	organizerName: string | null;
+	organizerWebsite: string | null;
+	// Event format
+	eventFormat: EventFormat | null;
+	eventExpectedAttendees: number | null;
 	createdAt: string;
 	updatedAt: string;
 	tiers?: Tier[];

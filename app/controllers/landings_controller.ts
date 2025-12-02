@@ -1,13 +1,12 @@
 import type { HttpContext } from "@adonisjs/core/http";
-import Waitlist from "#models/waitlist";
+import waitlistService from "#services/waitlist_service";
 
 export default class LandingsController {
 	async index({ inertia }: HttpContext) {
-		const waitlistCount = await Waitlist.query().count("* as total");
-		const count = Number(waitlistCount[0].$extras.total) || 0;
+		const waitlistCount = await waitlistService.getCount();
 
 		return inertia.render("landing", {
-			waitlistCount: count,
+			waitlistCount,
 		});
 	}
 }

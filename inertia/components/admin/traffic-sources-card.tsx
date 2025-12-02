@@ -1,7 +1,11 @@
 "use client";
 
 import { ExternalLink, Globe, Search, Share2, Tag } from "lucide-react";
-import { TabbedDataCard, type DataCardColumn, type DataCardTab } from "./data-card";
+import {
+	type DataCardColumn,
+	type DataCardTab,
+	TabbedDataCard,
+} from "./data-card";
 
 // Referrer types
 interface Referrer {
@@ -33,20 +37,90 @@ interface TrafficSourcesCardProps {
 
 // Mock data - Referrers
 const mockReferrers: Referrer[] = [
-	{ id: "r1", source: "Direct", type: "direct", sessions: 2845, percentage: 36.6 },
-	{ id: "r2", source: "Google", type: "search", sessions: 2156, percentage: 27.8 },
-	{ id: "r3", source: "Twitter/X", type: "social", sessions: 1023, percentage: 13.2 },
-	{ id: "r4", source: "LinkedIn", type: "social", sessions: 756, percentage: 9.7 },
-	{ id: "r5", source: "ProductHunt", type: "referral", sessions: 534, percentage: 6.9 },
+	{
+		id: "r1",
+		source: "Direct",
+		type: "direct",
+		sessions: 2845,
+		percentage: 36.6,
+	},
+	{
+		id: "r2",
+		source: "Google",
+		type: "search",
+		sessions: 2156,
+		percentage: 27.8,
+	},
+	{
+		id: "r3",
+		source: "Twitter/X",
+		type: "social",
+		sessions: 1023,
+		percentage: 13.2,
+	},
+	{
+		id: "r4",
+		source: "LinkedIn",
+		type: "social",
+		sessions: 756,
+		percentage: 9.7,
+	},
+	{
+		id: "r5",
+		source: "ProductHunt",
+		type: "referral",
+		sessions: 534,
+		percentage: 6.9,
+	},
 ];
 
 // Mock data - UTM
 const mockUTMParams: UTMParameter[] = [
-	{ id: "u1", campaign: "launch_2024", source: "twitter", medium: "social", sessions: 1245, percentage: 28.5, conversions: 89 },
-	{ id: "u2", campaign: "newsletter_nov", source: "email", medium: "email", sessions: 987, percentage: 22.6, conversions: 156 },
-	{ id: "u3", campaign: "ph_launch", source: "producthunt", medium: "referral", sessions: 756, percentage: 17.3, conversions: 67 },
-	{ id: "u4", campaign: "linkedin_ads", source: "linkedin", medium: "cpc", sessions: 534, percentage: 12.2, conversions: 34 },
-	{ id: "u5", campaign: "blog_seo", source: "google", medium: "organic", sessions: 423, percentage: 9.7, conversions: 28 },
+	{
+		id: "u1",
+		campaign: "launch_2024",
+		source: "twitter",
+		medium: "social",
+		sessions: 1245,
+		percentage: 28.5,
+		conversions: 89,
+	},
+	{
+		id: "u2",
+		campaign: "newsletter_nov",
+		source: "email",
+		medium: "email",
+		sessions: 987,
+		percentage: 22.6,
+		conversions: 156,
+	},
+	{
+		id: "u3",
+		campaign: "ph_launch",
+		source: "producthunt",
+		medium: "referral",
+		sessions: 756,
+		percentage: 17.3,
+		conversions: 67,
+	},
+	{
+		id: "u4",
+		campaign: "linkedin_ads",
+		source: "linkedin",
+		medium: "cpc",
+		sessions: 534,
+		percentage: 12.2,
+		conversions: 34,
+	},
+	{
+		id: "u5",
+		campaign: "blog_seo",
+		source: "google",
+		medium: "organic",
+		sessions: 423,
+		percentage: 9.7,
+		conversions: 28,
+	},
 ];
 
 // Helper functions - Referrers
@@ -118,7 +192,9 @@ const referrerColumns: DataCardColumn<Referrer>[] = [
 		key: "sessions",
 		header: "Sessions",
 		render: (referrer) => (
-			<span className="text-muted-foreground">{formatNumber(referrer.sessions)}</span>
+			<span className="text-muted-foreground">
+				{formatNumber(referrer.sessions)}
+			</span>
 		),
 		className: "text-right",
 	},
@@ -138,7 +214,9 @@ const referrerModalColumns: DataCardColumn<Referrer>[] = [
 		key: "type",
 		header: "Type",
 		render: (referrer) => (
-			<span className="text-muted-foreground capitalize text-xs">{referrer.type}</span>
+			<span className="text-muted-foreground capitalize text-xs">
+				{referrer.type}
+			</span>
 		),
 	},
 	{
@@ -171,16 +249,16 @@ const utmColumns: DataCardColumn<UTMParameter>[] = [
 		key: "sessions",
 		header: "Sessions",
 		render: (utm) => (
-			<span className="text-muted-foreground">{formatNumber(utm.sessions)}</span>
+			<span className="text-muted-foreground">
+				{formatNumber(utm.sessions)}
+			</span>
 		),
 		className: "text-right",
 	},
 	{
 		key: "percentage",
 		header: "%",
-		render: (utm) => (
-			<span className="font-medium">{utm.percentage}%</span>
-		),
+		render: (utm) => <span className="font-medium">{utm.percentage}%</span>,
 		className: "text-right",
 	},
 ];
@@ -189,9 +267,7 @@ const utmModalColumns: DataCardColumn<UTMParameter>[] = [
 	{
 		key: "campaign",
 		header: "Campaign",
-		render: (utm) => (
-			<span className="font-medium">{utm.campaign}</span>
-		),
+		render: (utm) => <span className="font-medium">{utm.campaign}</span>,
 	},
 	{
 		key: "source",
@@ -204,7 +280,9 @@ const utmModalColumns: DataCardColumn<UTMParameter>[] = [
 		key: "medium",
 		header: "Medium",
 		render: (utm) => (
-			<span className={`px-2 py-0.5 rounded-full text-xs text-white ${getMediumColor(utm.medium)}`}>
+			<span
+				className={`px-2 py-0.5 rounded-full text-xs text-white ${getMediumColor(utm.medium)}`}
+			>
 				{utm.medium}
 			</span>
 		),
@@ -213,16 +291,16 @@ const utmModalColumns: DataCardColumn<UTMParameter>[] = [
 		key: "sessions",
 		header: "Sessions",
 		render: (utm) => (
-			<span className="text-muted-foreground">{formatNumber(utm.sessions)}</span>
+			<span className="text-muted-foreground">
+				{formatNumber(utm.sessions)}
+			</span>
 		),
 		className: "text-right",
 	},
 	{
 		key: "conversions",
 		header: "Conversions",
-		render: (utm) => (
-			<span className="font-medium">{utm.conversions}</span>
-		),
+		render: (utm) => <span className="font-medium">{utm.conversions}</span>,
 		className: "text-right",
 	},
 	{
@@ -243,7 +321,10 @@ export function TrafficSourcesCard({
 	referrers = mockReferrers,
 	utmParams = mockUTMParams,
 }: TrafficSourcesCardProps) {
-	const totalReferrerSessions = referrers.reduce((sum, r) => sum + r.sessions, 0);
+	const totalReferrerSessions = referrers.reduce(
+		(sum, r) => sum + r.sessions,
+		0,
+	);
 	const totalUTMSessions = utmParams.reduce((sum, u) => sum + u.sessions, 0);
 
 	const tabs: DataCardTab<TrafficSource>[] = [
@@ -262,7 +343,12 @@ export function TrafficSourcesCard({
 			exportHeaders: ["Source", "Type", "Sessions", "Pourcentage"],
 			exportRow: (item) => {
 				const referrer = item as Referrer;
-				return [referrer.source, referrer.type, referrer.sessions.toString(), `${referrer.percentage}%`];
+				return [
+					referrer.source,
+					referrer.type,
+					referrer.sessions.toString(),
+					`${referrer.percentage}%`,
+				];
 			},
 		},
 		{
@@ -277,16 +363,31 @@ export function TrafficSourcesCard({
 			getFilterValue: (item) => (item as UTMParameter).campaign,
 			emptyMessage: "Aucune campagne UTM",
 			exportFilename: "utm-campaigns-export.csv",
-			exportHeaders: ["Campaign", "Source", "Medium", "Sessions", "Conversions", "Pourcentage"],
+			exportHeaders: [
+				"Campaign",
+				"Source",
+				"Medium",
+				"Sessions",
+				"Conversions",
+				"Pourcentage",
+			],
 			exportRow: (item) => {
 				const utm = item as UTMParameter;
-				return [utm.campaign, utm.source, utm.medium, utm.sessions.toString(), utm.conversions.toString(), `${utm.percentage}%`];
+				return [
+					utm.campaign,
+					utm.source,
+					utm.medium,
+					utm.sessions.toString(),
+					utm.conversions.toString(),
+					`${utm.percentage}%`,
+				];
 			},
 		},
 	];
 
 	return (
 		<TabbedDataCard
+			id="traffic-sources"
 			tabs={tabs}
 			defaultTab="referrers"
 			modalTitle="Traffic Sources Analytics"

@@ -1,6 +1,7 @@
 import type { HttpContext } from "@adonisjs/core/http";
-import User from "#models/user";
-import { loginValidator } from "#validators/auth_validator";
+import { InvalidCredentialsException } from "#exceptions/index";
+import authService from "#services/auth_service";
+import { loginValidator } from "#validators/auth/index";
 
 export default class LoginController {
 	async show({ inertia }: HttpContext) {
@@ -13,16 +14,20 @@ export default class LoginController {
 		logger.info({ email }, "Login attempt");
 
 		try {
-			const user = await User.verifyCredentials(email, password);
+			const user = await authService.verifyCredentials(email, password);
+
 			logger.info({ userId: user.id }, "User verified successfully");
 			await auth.use("web").login(user);
 			logger.info("User logged in, redirecting to dashboard");
-			session.flash("success", "Connexion réussie !");
+			session.flash("success", "Connexion reussie !");
 			return response.redirect("/dashboard");
 		} catch (error) {
-			logger.error({ error, email }, "Login failed");
-			session.flash("error", "Email ou mot de passe incorrect");
-			return response.redirect("/login");
+			if (error instanceof InvalidCredentialsException) {
+				logger.error({ email }, "Login failed");
+				session.flash("error", "Email ou mot de passe incorrect");
+				return response.redirect("/login");
+			}
+			throw error;
 		}
 	}
 }

@@ -1,8 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { TabbedDataCard, type DataCardColumn, type DataCardTab } from "./data-card";
 import { Badge } from "~/components/ui/badge";
+import {
+	type DataCardColumn,
+	type DataCardTab,
+	TabbedDataCard,
+} from "./data-card";
 
 type RouteType = "page" | "api" | "sse" | "action";
 
@@ -170,7 +174,7 @@ export function RoutesCard() {
 
 	const createTab = (
 		id: string,
-		type: RouteType | "all"
+		type: RouteType | "all",
 	): DataCardTab<RouteInfo> => {
 		const filteredRoutes =
 			type === "all" ? routes : routes.filter((r) => r.type === type);
@@ -209,6 +213,7 @@ export function RoutesCard() {
 
 	return (
 		<TabbedDataCard
+			id="routes"
 			tabs={tabs}
 			defaultTab="all"
 			viewAllTooltip="Voir toutes les routes"

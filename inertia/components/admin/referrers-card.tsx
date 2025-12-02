@@ -17,13 +17,55 @@ interface ReferrersCardProps {
 
 // Mock data
 const mockReferrers: Referrer[] = [
-	{ id: "1", source: "Direct", type: "direct", sessions: 2845, percentage: 36.6 },
-	{ id: "2", source: "Google", type: "search", sessions: 2156, percentage: 27.8 },
-	{ id: "3", source: "Twitter/X", type: "social", sessions: 1023, percentage: 13.2 },
-	{ id: "4", source: "LinkedIn", type: "social", sessions: 756, percentage: 9.7 },
-	{ id: "5", source: "ProductHunt", type: "referral", sessions: 534, percentage: 6.9 },
-	{ id: "6", source: "Facebook", type: "social", sessions: 298, percentage: 3.8 },
-	{ id: "7", source: "Other", type: "referral", sessions: 152, percentage: 2.0 },
+	{
+		id: "1",
+		source: "Direct",
+		type: "direct",
+		sessions: 2845,
+		percentage: 36.6,
+	},
+	{
+		id: "2",
+		source: "Google",
+		type: "search",
+		sessions: 2156,
+		percentage: 27.8,
+	},
+	{
+		id: "3",
+		source: "Twitter/X",
+		type: "social",
+		sessions: 1023,
+		percentage: 13.2,
+	},
+	{
+		id: "4",
+		source: "LinkedIn",
+		type: "social",
+		sessions: 756,
+		percentage: 9.7,
+	},
+	{
+		id: "5",
+		source: "ProductHunt",
+		type: "referral",
+		sessions: 534,
+		percentage: 6.9,
+	},
+	{
+		id: "6",
+		source: "Facebook",
+		type: "social",
+		sessions: 298,
+		percentage: 3.8,
+	},
+	{
+		id: "7",
+		source: "Other",
+		type: "referral",
+		sessions: 152,
+		percentage: 2.0,
+	},
 ];
 
 const getReferrerIcon = (type: Referrer["type"]) => {
@@ -77,7 +119,9 @@ const columns: DataCardColumn<Referrer>[] = [
 		key: "sessions",
 		header: "Sessions",
 		render: (referrer) => (
-			<span className="text-muted-foreground">{formatNumber(referrer.sessions)}</span>
+			<span className="text-muted-foreground">
+				{formatNumber(referrer.sessions)}
+			</span>
 		),
 		className: "text-right",
 	},
@@ -97,7 +141,9 @@ const modalColumns: DataCardColumn<Referrer>[] = [
 		key: "type",
 		header: "Type",
 		render: (referrer) => (
-			<span className="text-muted-foreground capitalize text-xs">{referrer.type}</span>
+			<span className="text-muted-foreground capitalize text-xs">
+				{referrer.type}
+			</span>
 		),
 	},
 	{
@@ -114,7 +160,9 @@ const modalColumns: DataCardColumn<Referrer>[] = [
 	},
 ];
 
-export function ReferrersCard({ referrers = mockReferrers }: ReferrersCardProps) {
+export function ReferrersCard({
+	referrers = mockReferrers,
+}: ReferrersCardProps) {
 	const totalSessions = referrers.reduce((sum, r) => sum + r.sessions, 0);
 	const displayedReferrers = referrers.slice(0, 5);
 

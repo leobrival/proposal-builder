@@ -45,38 +45,175 @@ export default class extends BaseSeeder {
 		// Growth curve: users per month over 18 months
 		// Simulates: slow start -> growth -> acceleration
 		const usersPerMonth = [
-			3, 5, 7, // Months 1-3: Early adopters (15 users)
-			12, 15, 18, // Months 4-6: Initial growth (45 users)
-			22, 28, 35, // Months 7-9: Growth phase (85 users)
-			42, 50, 58, // Months 10-12: Acceleration (150 users)
-			65, 72, 80, // Months 13-15: Strong growth (217 users)
-			88, 95, 45, // Months 16-18: Current momentum (228 users)
+			3,
+			5,
+			7, // Months 1-3: Early adopters (15 users)
+			12,
+			15,
+			18, // Months 4-6: Initial growth (45 users)
+			22,
+			28,
+			35, // Months 7-9: Growth phase (85 users)
+			42,
+			50,
+			58, // Months 10-12: Acceleration (150 users)
+			65,
+			72,
+			80, // Months 13-15: Strong growth (217 users)
+			88,
+			95,
+			45, // Months 16-18: Current momentum (228 users)
 		];
 
 		const firstNames = [
-			"Alice", "Bob", "Claire", "David", "Emma", "Florian", "Gabrielle", "Hugo",
-			"Isabelle", "Julien", "Karine", "Lucas", "Marie", "Nicolas", "Olivia",
-			"Pierre", "Quentin", "Rachel", "Simon", "Tania", "Ugo", "Valerie",
-			"William", "Xavier", "Yasmine", "Zoe", "Antoine", "Beatrice", "Cedric",
-			"Delphine", "Etienne", "Fanny", "Guillaume", "Helene", "Ivan", "Julie",
-			"Kevin", "Laure", "Marc", "Nadia", "Oscar", "Pauline", "Romain", "Sophie",
-			"Thomas", "Ursula", "Victor", "Wendy", "Yann", "Zohra", "Adrien", "Brigitte",
-			"Christophe", "Diane", "Eric", "Francoise", "Gerard", "Henriette", "Igor",
-			"Jacqueline", "Karl", "Lucie", "Mathieu", "Nathalie", "Olivier", "Patricia",
-			"Quentin", "Renee", "Sebastien", "Therese", "Ulrich", "Veronique", "Willy",
-			"Xaviere", "Yohan", "Zara", "Arnaud", "Bernadette", "Cyril", "Dominique",
+			"Alice",
+			"Bob",
+			"Claire",
+			"David",
+			"Emma",
+			"Florian",
+			"Gabrielle",
+			"Hugo",
+			"Isabelle",
+			"Julien",
+			"Karine",
+			"Lucas",
+			"Marie",
+			"Nicolas",
+			"Olivia",
+			"Pierre",
+			"Quentin",
+			"Rachel",
+			"Simon",
+			"Tania",
+			"Ugo",
+			"Valerie",
+			"William",
+			"Xavier",
+			"Yasmine",
+			"Zoe",
+			"Antoine",
+			"Beatrice",
+			"Cedric",
+			"Delphine",
+			"Etienne",
+			"Fanny",
+			"Guillaume",
+			"Helene",
+			"Ivan",
+			"Julie",
+			"Kevin",
+			"Laure",
+			"Marc",
+			"Nadia",
+			"Oscar",
+			"Pauline",
+			"Romain",
+			"Sophie",
+			"Thomas",
+			"Ursula",
+			"Victor",
+			"Wendy",
+			"Yann",
+			"Zohra",
+			"Adrien",
+			"Brigitte",
+			"Christophe",
+			"Diane",
+			"Eric",
+			"Francoise",
+			"Gerard",
+			"Henriette",
+			"Igor",
+			"Jacqueline",
+			"Karl",
+			"Lucie",
+			"Mathieu",
+			"Nathalie",
+			"Olivier",
+			"Patricia",
+			"Quentin",
+			"Renee",
+			"Sebastien",
+			"Therese",
+			"Ulrich",
+			"Veronique",
+			"Willy",
+			"Xaviere",
+			"Yohan",
+			"Zara",
+			"Arnaud",
+			"Bernadette",
+			"Cyril",
+			"Dominique",
 		];
 
 		const lastNames = [
-			"Martin", "Bernard", "Thomas", "Petit", "Robert", "Richard", "Durand",
-			"Dubois", "Moreau", "Laurent", "Simon", "Michel", "Lefebvre", "Leroy",
-			"Roux", "David", "Bertrand", "Morel", "Fournier", "Girard", "Bonnet",
-			"Dupont", "Lambert", "Fontaine", "Rousseau", "Vincent", "Muller", "Lefevre",
-			"Faure", "Andre", "Mercier", "Blanc", "Guerin", "Boyer", "Garnier", "Chevalier",
-			"Francois", "Legrand", "Gauthier", "Garcia", "Perrin", "Robin", "Clement",
-			"Morin", "Nicolas", "Henry", "Roussel", "Mathieu", "Gautier", "Masson",
-			"Marchand", "Duval", "Denis", "Dumont", "Marie", "Lemaire", "Noel", "Meyer",
-			"Dufour", "Meunier", "Brun", "Blanchard", "Giraud", "Joly", "Riviere",
+			"Martin",
+			"Bernard",
+			"Thomas",
+			"Petit",
+			"Robert",
+			"Richard",
+			"Durand",
+			"Dubois",
+			"Moreau",
+			"Laurent",
+			"Simon",
+			"Michel",
+			"Lefebvre",
+			"Leroy",
+			"Roux",
+			"David",
+			"Bertrand",
+			"Morel",
+			"Fournier",
+			"Girard",
+			"Bonnet",
+			"Dupont",
+			"Lambert",
+			"Fontaine",
+			"Rousseau",
+			"Vincent",
+			"Muller",
+			"Lefevre",
+			"Faure",
+			"Andre",
+			"Mercier",
+			"Blanc",
+			"Guerin",
+			"Boyer",
+			"Garnier",
+			"Chevalier",
+			"Francois",
+			"Legrand",
+			"Gauthier",
+			"Garcia",
+			"Perrin",
+			"Robin",
+			"Clement",
+			"Morin",
+			"Nicolas",
+			"Henry",
+			"Roussel",
+			"Mathieu",
+			"Gautier",
+			"Masson",
+			"Marchand",
+			"Duval",
+			"Denis",
+			"Dumont",
+			"Marie",
+			"Lemaire",
+			"Noel",
+			"Meyer",
+			"Dufour",
+			"Meunier",
+			"Brun",
+			"Blanchard",
+			"Giraud",
+			"Joly",
+			"Riviere",
 		];
 
 		let userIndex = 0;
@@ -88,7 +225,9 @@ export default class extends BaseSeeder {
 			for (let i = 0; i < numUsers; i++) {
 				// Random day within the month
 				const dayInMonth = Math.floor(Math.random() * 28) + 1;
-				const createdAt = now.minus({ months: monthsAgo }).set({ day: dayInMonth });
+				const createdAt = now
+					.minus({ months: monthsAgo })
+					.set({ day: dayInMonth });
 
 				// Skip if date is in the future
 				if (createdAt > now) continue;
@@ -98,7 +237,8 @@ export default class extends BaseSeeder {
 				const emailSuffix = userIndex > 0 ? userIndex.toString() : "";
 
 				const user = await User.create({
-					fullName: `${firstName} ${lastName}`,
+					firstName,
+					lastName,
 					email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}${emailSuffix}@example.com`,
 					password: "password123",
 					role: "user",
@@ -120,21 +260,81 @@ export default class extends BaseSeeder {
 		const proposals: Proposal[] = [];
 
 		const proposalTemplates = [
-			{ title: "YouTube Tech Review Partnership", projectName: "TechTalk Reviews", category: "tech" },
-			{ title: "Fitness Instagram Collaboration", projectName: "FitLife Daily", category: "fitness" },
-			{ title: "Gaming Twitch Sponsorship", projectName: "GameStream Pro", category: "gaming" },
-			{ title: "Food Blog Collaboration", projectName: "Gourmet Adventures", category: "food" },
-			{ title: "Travel Vlog Sponsorship", projectName: "Wanderlust Diaries", category: "travel" },
-			{ title: "Fashion Influencer Partnership", projectName: "Style Maven", category: "fashion" },
-			{ title: "Podcast Advertising Opportunity", projectName: "The Daily Insight", category: "podcast" },
-			{ title: "Photography Portfolio Sponsorship", projectName: "Lens & Light", category: "photo" },
-			{ title: "Music Channel Collaboration", projectName: "Melody Makers", category: "music" },
-			{ title: "DIY & Crafts Partnership", projectName: "Creative Corner", category: "diy" },
-			{ title: "Beauty Tutorial Sponsorship", projectName: "Glam Guide", category: "beauty" },
-			{ title: "Parenting Blog Collaboration", projectName: "Family First", category: "parenting" },
-			{ title: "Finance Education Partnership", projectName: "Money Matters", category: "finance" },
-			{ title: "Pet Content Sponsorship", projectName: "Pawsome Life", category: "pets" },
-			{ title: "Home Decor Partnership", projectName: "Interior Dreams", category: "home" },
+			{
+				title: "YouTube Tech Review Partnership",
+				projectName: "TechTalk Reviews",
+				category: "tech",
+			},
+			{
+				title: "Fitness Instagram Collaboration",
+				projectName: "FitLife Daily",
+				category: "fitness",
+			},
+			{
+				title: "Gaming Twitch Sponsorship",
+				projectName: "GameStream Pro",
+				category: "gaming",
+			},
+			{
+				title: "Food Blog Collaboration",
+				projectName: "Gourmet Adventures",
+				category: "food",
+			},
+			{
+				title: "Travel Vlog Sponsorship",
+				projectName: "Wanderlust Diaries",
+				category: "travel",
+			},
+			{
+				title: "Fashion Influencer Partnership",
+				projectName: "Style Maven",
+				category: "fashion",
+			},
+			{
+				title: "Podcast Advertising Opportunity",
+				projectName: "The Daily Insight",
+				category: "podcast",
+			},
+			{
+				title: "Photography Portfolio Sponsorship",
+				projectName: "Lens & Light",
+				category: "photo",
+			},
+			{
+				title: "Music Channel Collaboration",
+				projectName: "Melody Makers",
+				category: "music",
+			},
+			{
+				title: "DIY & Crafts Partnership",
+				projectName: "Creative Corner",
+				category: "diy",
+			},
+			{
+				title: "Beauty Tutorial Sponsorship",
+				projectName: "Glam Guide",
+				category: "beauty",
+			},
+			{
+				title: "Parenting Blog Collaboration",
+				projectName: "Family First",
+				category: "parenting",
+			},
+			{
+				title: "Finance Education Partnership",
+				projectName: "Money Matters",
+				category: "finance",
+			},
+			{
+				title: "Pet Content Sponsorship",
+				projectName: "Pawsome Life",
+				category: "pets",
+			},
+			{
+				title: "Home Decor Partnership",
+				projectName: "Interior Dreams",
+				category: "home",
+			},
 		];
 
 		const colors = [
@@ -149,7 +349,9 @@ export default class extends BaseSeeder {
 		];
 
 		// Status distribution changes over time (maturity)
-		const getStatusForAge = (monthsOld: number): "published" | "draft" | "archived" => {
+		const getStatusForAge = (
+			monthsOld: number,
+		): "published" | "draft" | "archived" => {
 			const rand = Math.random();
 			if (monthsOld > 12) {
 				// Old proposals: more archived
@@ -181,10 +383,14 @@ export default class extends BaseSeeder {
 
 			// Number of proposals per user (power law distribution)
 			const rand = Math.random();
-			const numProposals = rand < 0.6 ? 1 : rand < 0.85 ? 2 : rand < 0.95 ? 3 : 4;
+			const numProposals =
+				rand < 0.6 ? 1 : rand < 0.85 ? 2 : rand < 0.95 ? 3 : 4;
 
 			for (let j = 0; j < numProposals; j++) {
-				const template = proposalTemplates[Math.floor(Math.random() * proposalTemplates.length)];
+				const template =
+					proposalTemplates[
+						Math.floor(Math.random() * proposalTemplates.length)
+					];
 				const color = colors[Math.floor(Math.random() * colors.length)];
 
 				// Proposal created 1-60 days after user signup
@@ -196,9 +402,10 @@ export default class extends BaseSeeder {
 				const monthsOld = now.diff(proposalCreatedAt, "months").months;
 				const status = getStatusForAge(monthsOld);
 
-				const viewCount = status === "published"
-					? Math.floor(Math.random() * 1000) + Math.floor(monthsOld * 50)
-					: 0;
+				const viewCount =
+					status === "published"
+						? Math.floor(Math.random() * 1000) + Math.floor(monthsOld * 50)
+						: 0;
 
 				const proposal = await Proposal.create({
 					userId: user.id,
@@ -209,7 +416,8 @@ export default class extends BaseSeeder {
 					contactEmail: user.email,
 					status,
 					viewCount,
-					publishedAt: status === "published" ? proposalCreatedAt.plus({ days: 1 }) : null,
+					publishedAt:
+						status === "published" ? proposalCreatedAt.plus({ days: 1 }) : null,
 					designSettings: {
 						primaryColor: color.primary,
 						secondaryColor: color.secondary,
@@ -233,22 +441,75 @@ export default class extends BaseSeeder {
 		const leads: Lead[] = [];
 
 		const companies = [
-			"TechCorp", "InnovateLab", "Digital Agency", "StartupHub", "MediaGroup",
-			"BrandCo", "MarketingPro", "CreativeStudio", "GrowthPartners", "VentureWorks",
-			"AdTech Solutions", "ContentFirst", "EngageMedia", "SocialBoost", "InfluencerConnect",
-			"NextGen Marketing", "Digital Frontier", "Brand Builders", "Creative Minds", "Impact Agency",
-			"Viral Ventures", "Content Kings", "Social Stars", "Media Masters", "Brand Boost",
+			"TechCorp",
+			"InnovateLab",
+			"Digital Agency",
+			"StartupHub",
+			"MediaGroup",
+			"BrandCo",
+			"MarketingPro",
+			"CreativeStudio",
+			"GrowthPartners",
+			"VentureWorks",
+			"AdTech Solutions",
+			"ContentFirst",
+			"EngageMedia",
+			"SocialBoost",
+			"InfluencerConnect",
+			"NextGen Marketing",
+			"Digital Frontier",
+			"Brand Builders",
+			"Creative Minds",
+			"Impact Agency",
+			"Viral Ventures",
+			"Content Kings",
+			"Social Stars",
+			"Media Masters",
+			"Brand Boost",
 		];
 
 		const firstNames = [
-			"Jean", "Marie", "Pierre", "Sophie", "Michel", "Anne", "Philippe", "Catherine",
-			"Alain", "Christine", "François", "Nathalie", "Patrick", "Isabelle", "Bernard",
-			"Sylvie", "Laurent", "Martine", "Olivier", "Sandrine", "Thierry", "Valerie",
+			"Jean",
+			"Marie",
+			"Pierre",
+			"Sophie",
+			"Michel",
+			"Anne",
+			"Philippe",
+			"Catherine",
+			"Alain",
+			"Christine",
+			"François",
+			"Nathalie",
+			"Patrick",
+			"Isabelle",
+			"Bernard",
+			"Sylvie",
+			"Laurent",
+			"Martine",
+			"Olivier",
+			"Sandrine",
+			"Thierry",
+			"Valerie",
 		];
 
 		const lastNames = [
-			"Dupont", "Martin", "Bernard", "Thomas", "Robert", "Richard", "Petit", "Durand",
-			"Moreau", "Laurent", "Simon", "Michel", "Lefebvre", "Leroy", "Roux", "David",
+			"Dupont",
+			"Martin",
+			"Bernard",
+			"Thomas",
+			"Robert",
+			"Richard",
+			"Petit",
+			"Durand",
+			"Moreau",
+			"Laurent",
+			"Simon",
+			"Michel",
+			"Lefebvre",
+			"Leroy",
+			"Roux",
+			"David",
 		];
 
 		const messages = [
@@ -262,13 +523,19 @@ export default class extends BaseSeeder {
 			"Impressed by your engagement rates",
 			"We're expanding our influencer program",
 			"Looking for long-term partnership opportunities",
-			null, null, // Some leads don't leave messages
+			null,
+			null, // Some leads don't leave messages
 		];
 
-		const publishedProposals = proposals.filter((p) => p.status === "published");
+		const publishedProposals = proposals.filter(
+			(p) => p.status === "published",
+		);
 
 		for (const proposal of publishedProposals) {
-			const proposalAge = now.diff(proposal.publishedAt || proposal.createdAt, "months").months;
+			const proposalAge = now.diff(
+				proposal.publishedAt || proposal.createdAt,
+				"months",
+			).months;
 
 			// Leads increase with proposal age and maturity
 			// Older proposals have had more time to accumulate leads
@@ -276,14 +543,23 @@ export default class extends BaseSeeder {
 			const numLeads = Math.floor(Math.random() * (baseLeads + 5));
 
 			for (let i = 0; i < numLeads; i++) {
-				const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
-				const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+				const firstName =
+					firstNames[Math.floor(Math.random() * firstNames.length)];
+				const lastName =
+					lastNames[Math.floor(Math.random() * lastNames.length)];
 				const company = companies[Math.floor(Math.random() * companies.length)];
 
 				// Lead created sometime after proposal was published
-				const maxDaysAfter = Math.min(proposalAge * 30, now.diff(proposal.publishedAt || proposal.createdAt, "days").days);
-				const daysAfterPublish = Math.floor(Math.random() * Math.max(1, maxDaysAfter));
-				const leadCreatedAt = (proposal.publishedAt || proposal.createdAt).plus({ days: daysAfterPublish });
+				const maxDaysAfter = Math.min(
+					proposalAge * 30,
+					now.diff(proposal.publishedAt || proposal.createdAt, "days").days,
+				);
+				const daysAfterPublish = Math.floor(
+					Math.random() * Math.max(1, maxDaysAfter),
+				);
+				const leadCreatedAt = (proposal.publishedAt || proposal.createdAt).plus(
+					{ days: daysAfterPublish },
+				);
 
 				if (leadCreatedAt > now) continue;
 
@@ -298,11 +574,29 @@ export default class extends BaseSeeder {
 				} else if (leadAgeMonths < 3) {
 					// Medium age: in progress
 					const rand = Math.random();
-					status = rand < 0.2 ? "new" : rand < 0.5 ? "contacted" : rand < 0.7 ? "pending" : rand < 0.85 ? "converted" : "rejected";
+					status =
+						rand < 0.2
+							? "new"
+							: rand < 0.5
+								? "contacted"
+								: rand < 0.7
+									? "pending"
+									: rand < 0.85
+										? "converted"
+										: "rejected";
 				} else {
 					// Old leads: resolved
 					const rand = Math.random();
-					status = rand < 0.05 ? "new" : rand < 0.1 ? "contacted" : rand < 0.2 ? "pending" : rand < 0.7 ? "converted" : "rejected";
+					status =
+						rand < 0.05
+							? "new"
+							: rand < 0.1
+								? "contacted"
+								: rand < 0.2
+									? "pending"
+									: rand < 0.7
+										? "converted"
+										: "rejected";
 				}
 
 				const lead = await Lead.create({
@@ -310,10 +604,18 @@ export default class extends BaseSeeder {
 					name: `${firstName} ${lastName}`,
 					email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@${company.toLowerCase().replace(/\s+/g, "")}.com`,
 					company,
-					phone: Math.random() > 0.4 ? `+33 6 ${Math.floor(Math.random() * 90000000 + 10000000)}` : null,
+					phone:
+						Math.random() > 0.4
+							? `+33 6 ${Math.floor(Math.random() * 90000000 + 10000000)}`
+							: null,
 					message: messages[Math.floor(Math.random() * messages.length)],
 					status,
-					notes: status === "converted" ? "Deal closed successfully" : status === "rejected" ? "Budget constraints" : null,
+					notes:
+						status === "converted"
+							? "Deal closed successfully"
+							: status === "rejected"
+								? "Budget constraints"
+								: null,
 					createdAt: leadCreatedAt,
 					updatedAt: leadCreatedAt,
 				});

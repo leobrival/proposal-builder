@@ -17,7 +17,13 @@ interface DevicesCardProps {
 
 // Mock data
 const mockDevices: Device[] = [
-	{ id: "1", name: "Desktop", type: "desktop", sessions: 4521, percentage: 58.2 },
+	{
+		id: "1",
+		name: "Desktop",
+		type: "desktop",
+		sessions: 4521,
+		percentage: 58.2,
+	},
 	{ id: "2", name: "Mobile", type: "mobile", sessions: 2847, percentage: 36.7 },
 	{ id: "3", name: "Tablet", type: "tablet", sessions: 396, percentage: 5.1 },
 ];
@@ -52,7 +58,9 @@ const columns: DataCardColumn<Device>[] = [
 		key: "sessions",
 		header: "Sessions",
 		render: (device) => (
-			<span className="text-muted-foreground">{formatNumber(device.sessions)}</span>
+			<span className="text-muted-foreground">
+				{formatNumber(device.sessions)}
+			</span>
 		),
 		className: "text-right",
 	},

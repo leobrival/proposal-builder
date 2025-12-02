@@ -60,7 +60,10 @@ export function DefaultChart({
 		const link = document.createElement("a");
 		const url = URL.createObjectURL(blob);
 		link.setAttribute("href", url);
-		link.setAttribute("download", `${title.toLowerCase().replace(/\s+/g, "-")}-export.csv`);
+		link.setAttribute(
+			"download",
+			`${title.toLowerCase().replace(/\s+/g, "-")}-export.csv`,
+		);
 		link.style.visibility = "hidden";
 		document.body.appendChild(link);
 		link.click();
@@ -130,7 +133,11 @@ export function DefaultChart({
 					</ChartContainer>
 				</CardContent>
 				<CardFooter className="flex items-center justify-between">
-					<Button variant="outline" size="sm" onClick={() => setIsModalOpen(true)}>
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => setIsModalOpen(true)}
+					>
 						View All
 					</Button>
 					<DropdownMenu>
@@ -184,7 +191,13 @@ export function DefaultChart({
 									content={<ChartTooltipContent indicator="line" />}
 								/>
 								<defs>
-									<linearGradient id="fillValueModal" x1="0" y1="0" x2="0" y2="1">
+									<linearGradient
+										id="fillValueModal"
+										x1="0"
+										y1="0"
+										x2="0"
+										y2="1"
+									>
 										<stop
 											offset="5%"
 											stopColor="hsl(221, 83%, 53%)"

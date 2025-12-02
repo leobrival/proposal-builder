@@ -76,7 +76,12 @@ export function ProposalsChart({ data, period }: ProposalsChartProps) {
 							axisLine={false}
 							tickFormatter={(value) => value.slice(0, 6)}
 						/>
-						<YAxis tickLine={false} axisLine={false} tickMargin={8} width={30} />
+						<YAxis
+							tickLine={false}
+							axisLine={false}
+							tickMargin={8}
+							width={30}
+						/>
 						<ChartTooltip content={<ChartTooltipContent />} />
 						<ChartLegend content={<ChartLegendContent />} />
 						<Bar

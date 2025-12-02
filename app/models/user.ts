@@ -3,12 +3,13 @@ import { withAuthFinder } from "@adonisjs/auth/mixins/lucid";
 import { compose } from "@adonisjs/core/helpers";
 import hash from "@adonisjs/core/services/hash";
 import {
-	BaseModel,
 	afterCreate,
 	afterDelete,
 	afterUpdate,
+	BaseModel,
 	beforeCreate,
 	column,
+	computed,
 	hasMany,
 } from "@adonisjs/lucid/orm";
 import type { HasMany } from "@adonisjs/lucid/types/relations";
@@ -29,7 +30,10 @@ export default class User extends compose(BaseModel, AuthFinder) {
 	declare id: string;
 
 	@column()
-	declare fullName: string;
+	declare firstName: string;
+
+	@column()
+	declare lastName: string;
 
 	@column()
 	declare email: string;
@@ -60,6 +64,11 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
 	@hasMany(() => Proposal)
 	declare proposals: HasMany<typeof Proposal>;
+
+	@computed()
+	get fullName(): string {
+		return [this.firstName, this.lastName].filter(Boolean).join(" ");
+	}
 
 	@beforeCreate()
 	static assignId(user: User) {

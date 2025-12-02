@@ -1,15 +1,14 @@
 "use client";
 
 import { router } from "@inertiajs/react";
-import {
-	Archive,
-	Eye,
-	FileEdit,
-	Globe,
-	Trash2,
-} from "lucide-react";
+import { Archive, Eye, FileEdit, Globe, Trash2 } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
-import { TabbedDataCard, type DataCardAction, type DataCardColumn, type DataCardTab } from "./data-card";
+import {
+	type DataCardAction,
+	type DataCardColumn,
+	type DataCardTab,
+	TabbedDataCard,
+} from "./data-card";
 
 interface Proposal {
 	id: string;
@@ -66,12 +65,16 @@ const createProposalActions = (): DataCardAction<Proposal>[] => [
 		label: "Publier",
 		icon: <Globe className="h-4 w-4" />,
 		onClick: async (proposal) => {
-			router.put(`/admin/api/proposals/${proposal.id}/status`, { status: "published" }, {
-				preserveScroll: true,
-				onSuccess: () => {
-					router.reload({ only: ["recentProposals"] });
+			router.put(
+				`/admin/api/proposals/${proposal.id}/status`,
+				{ status: "published" },
+				{
+					preserveScroll: true,
+					onSuccess: () => {
+						router.reload({ only: ["recentProposals"] });
+					},
 				},
-			});
+			);
 		},
 		show: (proposal) => proposal.status === "draft",
 	},
@@ -80,12 +83,16 @@ const createProposalActions = (): DataCardAction<Proposal>[] => [
 		label: "Dépublier",
 		icon: <FileEdit className="h-4 w-4" />,
 		onClick: async (proposal) => {
-			router.put(`/admin/api/proposals/${proposal.id}/status`, { status: "draft" }, {
-				preserveScroll: true,
-				onSuccess: () => {
-					router.reload({ only: ["recentProposals"] });
+			router.put(
+				`/admin/api/proposals/${proposal.id}/status`,
+				{ status: "draft" },
+				{
+					preserveScroll: true,
+					onSuccess: () => {
+						router.reload({ only: ["recentProposals"] });
+					},
 				},
-			});
+			);
 		},
 		show: (proposal) => proposal.status === "published",
 	},
@@ -95,12 +102,16 @@ const createProposalActions = (): DataCardAction<Proposal>[] => [
 		icon: <Archive className="h-4 w-4" />,
 		separator: true,
 		onClick: async (proposal) => {
-			router.put(`/admin/api/proposals/${proposal.id}/status`, { status: "archived" }, {
-				preserveScroll: true,
-				onSuccess: () => {
-					router.reload({ only: ["recentProposals"] });
+			router.put(
+				`/admin/api/proposals/${proposal.id}/status`,
+				{ status: "archived" },
+				{
+					preserveScroll: true,
+					onSuccess: () => {
+						router.reload({ only: ["recentProposals"] });
+					},
 				},
-			});
+			);
 		},
 		show: (proposal) => proposal.status !== "archived",
 	},
@@ -109,12 +120,16 @@ const createProposalActions = (): DataCardAction<Proposal>[] => [
 		label: "Restaurer",
 		icon: <FileEdit className="h-4 w-4" />,
 		onClick: async (proposal) => {
-			router.put(`/admin/api/proposals/${proposal.id}/status`, { status: "draft" }, {
-				preserveScroll: true,
-				onSuccess: () => {
-					router.reload({ only: ["recentProposals"] });
+			router.put(
+				`/admin/api/proposals/${proposal.id}/status`,
+				{ status: "draft" },
+				{
+					preserveScroll: true,
+					onSuccess: () => {
+						router.reload({ only: ["recentProposals"] });
+					},
 				},
-			});
+			);
 		},
 		show: (proposal) => proposal.status === "archived",
 	},
@@ -142,7 +157,9 @@ const columns: DataCardColumn<Proposal>[] = [
 		key: "title",
 		header: "Title",
 		render: (proposal) => (
-			<span className="font-medium truncate max-w-[200px] block">{proposal.title}</span>
+			<span className="font-medium truncate max-w-[200px] block">
+				{proposal.title}
+			</span>
 		),
 	},
 	{
@@ -169,7 +186,9 @@ const columnsWithoutStatus: DataCardColumn<Proposal>[] = [
 		key: "title",
 		header: "Title",
 		render: (proposal) => (
-			<span className="font-medium truncate max-w-[200px] block">{proposal.title}</span>
+			<span className="font-medium truncate max-w-[200px] block">
+				{proposal.title}
+			</span>
 		),
 	},
 	{
@@ -183,7 +202,9 @@ const columnsWithoutStatus: DataCardColumn<Proposal>[] = [
 		key: "createdAt",
 		header: "Date",
 		render: (proposal) => (
-			<span className="text-muted-foreground text-sm">{formatDate(proposal.createdAt)}</span>
+			<span className="text-muted-foreground text-sm">
+				{formatDate(proposal.createdAt)}
+			</span>
 		),
 		className: "text-right",
 	},
@@ -193,9 +214,7 @@ const modalColumns: DataCardColumn<Proposal>[] = [
 	{
 		key: "title",
 		header: "Title",
-		render: (proposal) => (
-			<span className="font-medium">{proposal.title}</span>
-		),
+		render: (proposal) => <span className="font-medium">{proposal.title}</span>,
 	},
 	{
 		key: "authorName",
@@ -217,7 +236,9 @@ const modalColumns: DataCardColumn<Proposal>[] = [
 		key: "createdAt",
 		header: "Created",
 		render: (proposal) => (
-			<span className="text-muted-foreground">{formatDate(proposal.createdAt)}</span>
+			<span className="text-muted-foreground">
+				{formatDate(proposal.createdAt)}
+			</span>
 		),
 	},
 ];
@@ -234,7 +255,7 @@ export function RecentProposalsCard({ proposals }: RecentProposalsCardProps) {
 		id: string,
 		label: string,
 		data: Proposal[],
-		showStatus: boolean = false
+		showStatus: boolean = false,
 	): DataCardTab<Proposal> => ({
 		id,
 		label,
@@ -266,6 +287,7 @@ export function RecentProposalsCard({ proposals }: RecentProposalsCardProps) {
 
 	return (
 		<TabbedDataCard
+			id="proposals"
 			tabs={tabs}
 			defaultTab="all"
 			modalTitle="All Proposals"

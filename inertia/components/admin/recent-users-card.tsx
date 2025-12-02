@@ -9,8 +9,13 @@ import {
 	Trash2,
 	Unlock,
 } from "lucide-react";
-import { TabbedDataCard, type DataCardAction, type DataCardColumn, type DataCardTab } from "./data-card";
 import { Badge } from "~/components/ui/badge";
+import {
+	type DataCardAction,
+	type DataCardColumn,
+	type DataCardTab,
+	TabbedDataCard,
+} from "./data-card";
 
 interface User {
 	id: string;
@@ -40,12 +45,16 @@ const createUserActions = (): DataCardAction<User>[] => [
 		label: "Passer en Payant",
 		icon: <CreditCard className="h-4 w-4" />,
 		onClick: async (user) => {
-			router.put(`/admin/api/users/${user.id}/plan`, { plan: "paid" }, {
-				preserveScroll: true,
-				onSuccess: () => {
-					router.reload({ only: ["recentUsers"] });
+			router.put(
+				`/admin/api/users/${user.id}/plan`,
+				{ plan: "paid" },
+				{
+					preserveScroll: true,
+					onSuccess: () => {
+						router.reload({ only: ["recentUsers"] });
+					},
 				},
-			});
+			);
 		},
 		show: (user) => user.plan === "free",
 	},
@@ -54,12 +63,16 @@ const createUserActions = (): DataCardAction<User>[] => [
 		label: "Passer en Gratuit",
 		icon: <CreditCard className="h-4 w-4" />,
 		onClick: async (user) => {
-			router.put(`/admin/api/users/${user.id}/plan`, { plan: "free" }, {
-				preserveScroll: true,
-				onSuccess: () => {
-					router.reload({ only: ["recentUsers"] });
+			router.put(
+				`/admin/api/users/${user.id}/plan`,
+				{ plan: "free" },
+				{
+					preserveScroll: true,
+					onSuccess: () => {
+						router.reload({ only: ["recentUsers"] });
+					},
 				},
-			});
+			);
 		},
 		show: (user) => user.plan === "paid",
 	},
@@ -68,12 +81,16 @@ const createUserActions = (): DataCardAction<User>[] => [
 		label: "Promouvoir Admin",
 		icon: <Shield className="h-4 w-4" />,
 		onClick: async (user) => {
-			router.put(`/admin/api/users/${user.id}/admin`, { isAdmin: true }, {
-				preserveScroll: true,
-				onSuccess: () => {
-					router.reload({ only: ["recentUsers"] });
+			router.put(
+				`/admin/api/users/${user.id}/admin`,
+				{ isAdmin: true },
+				{
+					preserveScroll: true,
+					onSuccess: () => {
+						router.reload({ only: ["recentUsers"] });
+					},
 				},
-			});
+			);
 		},
 		show: (user) => !user.isAdmin,
 	},
@@ -82,12 +99,16 @@ const createUserActions = (): DataCardAction<User>[] => [
 		label: "Révoquer Admin",
 		icon: <ShieldOff className="h-4 w-4" />,
 		onClick: async (user) => {
-			router.put(`/admin/api/users/${user.id}/admin`, { isAdmin: false }, {
-				preserveScroll: true,
-				onSuccess: () => {
-					router.reload({ only: ["recentUsers"] });
+			router.put(
+				`/admin/api/users/${user.id}/admin`,
+				{ isAdmin: false },
+				{
+					preserveScroll: true,
+					onSuccess: () => {
+						router.reload({ only: ["recentUsers"] });
+					},
 				},
-			});
+			);
 		},
 		show: (user) => user.isAdmin === true,
 	},
@@ -98,12 +119,16 @@ const createUserActions = (): DataCardAction<User>[] => [
 		variant: "destructive",
 		separator: true,
 		onClick: async (user) => {
-			router.put(`/admin/api/users/${user.id}/block`, { isBlocked: true }, {
-				preserveScroll: true,
-				onSuccess: () => {
-					router.reload({ only: ["recentUsers"] });
+			router.put(
+				`/admin/api/users/${user.id}/block`,
+				{ isBlocked: true },
+				{
+					preserveScroll: true,
+					onSuccess: () => {
+						router.reload({ only: ["recentUsers"] });
+					},
 				},
-			});
+			);
 		},
 		show: (user) => !user.isBlocked,
 	},
@@ -112,12 +137,16 @@ const createUserActions = (): DataCardAction<User>[] => [
 		label: "Débloquer",
 		icon: <Unlock className="h-4 w-4" />,
 		onClick: async (user) => {
-			router.put(`/admin/api/users/${user.id}/block`, { isBlocked: false }, {
-				preserveScroll: true,
-				onSuccess: () => {
-					router.reload({ only: ["recentUsers"] });
+			router.put(
+				`/admin/api/users/${user.id}/block`,
+				{ isBlocked: false },
+				{
+					preserveScroll: true,
+					onSuccess: () => {
+						router.reload({ only: ["recentUsers"] });
+					},
 				},
-			});
+			);
 		},
 		show: (user) => user.isBlocked === true,
 	},
@@ -192,7 +221,7 @@ export function RecentUsersCard({ users }: RecentUsersCardProps) {
 		id: string,
 		label: string,
 		data: User[],
-		showPlanColumn = false
+		showPlanColumn = false,
 	): DataCardTab<User> => ({
 		id,
 		label,
@@ -224,6 +253,7 @@ export function RecentUsersCard({ users }: RecentUsersCardProps) {
 
 	return (
 		<TabbedDataCard
+			id="users"
 			tabs={tabs}
 			defaultTab="all"
 			viewAllTooltip="Voir tous les utilisateurs"

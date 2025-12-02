@@ -30,7 +30,7 @@ function AnimatedNumber({ value }: { value: number }) {
 			const progress = Math.min(elapsed / duration, 1);
 
 			// Easing function (ease-out-cubic)
-			const easeOut = 1 - Math.pow(1 - progress, 3);
+			const easeOut = 1 - (1 - progress) ** 3;
 
 			const current = Math.round(start + (end - start) * easeOut);
 			setDisplayValue(current);

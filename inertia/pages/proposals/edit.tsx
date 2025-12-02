@@ -1,5 +1,5 @@
 import { Head, Link, router } from "@inertiajs/react";
-import { ExternalLink, Globe, Save } from "lucide-react";
+import { ExternalLink, Globe, Paintbrush, Save } from "lucide-react";
 import { useCallback, useState } from "react";
 import AppLayout from "../../components/layouts/app-layout";
 import { DomainSettings } from "../../components/proposals/domain-settings";
@@ -35,6 +35,7 @@ export default function EditProposal({
 		...initialProposal,
 		tiers: initialProposal.tiers || [],
 		designSettings: initialProposal.designSettings || defaultDesignSettings,
+		eventTags: initialProposal.eventTags || [],
 	});
 
 	const { isSaving, lastSavedAt, hasUnsavedChanges, save } = useAutosave({
@@ -204,6 +205,13 @@ export default function EditProposal({
 						<Save className="h-4 w-4 mr-2" />
 						Sauvegarder
 					</Button>
+
+					<Link href={`/proposals/${proposal.id}/builder`}>
+						<Button variant="outline" size="sm">
+							<Paintbrush className="h-4 w-4 mr-2" />
+							Builder
+						</Button>
+					</Link>
 
 					{proposal.status === "draft" ? (
 						<Button size="sm" onClick={handlePublish}>

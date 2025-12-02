@@ -1,6 +1,6 @@
 import transmit from "@adonisjs/transmit/services/main";
-import MetricsService from "./metrics_service.js";
 import type { Period } from "./metrics_service.js";
+import MetricsService from "./metrics_service.js";
 
 export default class MetricsBroadcaster {
 	private metricsService: MetricsService;
@@ -27,7 +27,11 @@ export default class MetricsBroadcaster {
 	/**
 	 * Broadcast a new user registration event
 	 */
-	async broadcastNewUser(user: { id: string; fullName: string; email: string }) {
+	async broadcastNewUser(user: {
+		id: string;
+		fullName: string;
+		email: string;
+	}) {
 		transmit.broadcast("admin/metrics", {
 			type: "new_user",
 			user,

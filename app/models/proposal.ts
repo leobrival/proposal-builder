@@ -1,10 +1,10 @@
 import { randomUUID } from "node:crypto";
 import string from "@adonisjs/core/helpers/string";
 import {
-	BaseModel,
 	afterCreate,
 	afterDelete,
 	afterUpdate,
+	BaseModel,
 	beforeCreate,
 	belongsTo,
 	column,
@@ -20,6 +20,7 @@ import User from "./user.js";
 export type ProposalStatus = "draft" | "published" | "archived";
 export type DomainStatus = "pending" | "verifying" | "verified" | "failed";
 export type SslStatus = "none" | "pending" | "active" | "failed";
+export type EventFormat = "in_person" | "online" | "hybrid";
 
 export interface DesignSettings {
 	primaryColor: string;
@@ -101,6 +102,83 @@ export default class Proposal extends BaseModel {
 
 	@column.dateTime()
 	declare domainVerifiedAt: DateTime | null;
+
+	// Event date and time
+	@column.dateTime()
+	declare eventStartDate: DateTime | null;
+
+	@column.dateTime()
+	declare eventEndDate: DateTime | null;
+
+	// Event location
+	@column()
+	declare eventVenueName: string | null;
+
+	@column()
+	declare eventAddress: string | null;
+
+	@column()
+	declare eventCity: string | null;
+
+	@column()
+	declare eventCountry: string | null;
+
+	@column()
+	declare eventLatitude: number | null;
+
+	@column()
+	declare eventLongitude: number | null;
+
+	// Event metadata
+	@column()
+	declare eventCategory: string | null;
+
+	@column({
+		prepare: (value: string[]) => JSON.stringify(value || []),
+		consume: (value: string) =>
+			typeof value === "string" ? JSON.parse(value) : value || [],
+	})
+	declare eventTags: string[];
+
+	@column()
+	declare eventSourceUrl: string | null;
+
+	@column()
+	declare eventSourcePlatform: string | null;
+
+	@column()
+	declare eventExternalId: string | null;
+
+	// Organizer info
+	@column()
+	declare organizerName: string | null;
+
+	@column()
+	declare organizerWebsite: string | null;
+
+	// Event format
+	@column()
+	declare eventFormat: EventFormat | null;
+
+	@column()
+	declare eventExpectedAttendees: number | null;
+
+	// Page layout for web builder (JSONB)
+	@column({
+		prepare: (value: unknown) => (value ? JSON.stringify(value) : null),
+		consume: (value: string | Record<string, unknown> | null) => {
+			if (!value) return null;
+			if (typeof value === "string") {
+				try {
+					return JSON.parse(value);
+				} catch {
+					return null;
+				}
+			}
+			return value;
+		},
+	})
+	declare pageLayout: Record<string, unknown> | null;
 
 	@column.dateTime({ autoCreate: true })
 	declare createdAt: DateTime;

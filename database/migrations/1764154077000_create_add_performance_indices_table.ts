@@ -14,10 +14,7 @@ export default class extends BaseSchema {
 		this.schema.alterTable("proposals", (table) => {
 			// Composite index status + created_at for combined filters
 			// Covers: WHERE status = 'published' AND created_at >= ?
-			table.index(
-				["status", "created_at"],
-				"idx_proposals_status_created_at",
-			);
+			table.index(["status", "created_at"], "idx_proposals_status_created_at");
 
 			// Index on created_at DESC for period queries without status filter
 			table.index(["created_at"], "idx_proposals_created_at_desc");
@@ -37,10 +34,7 @@ export default class extends BaseSchema {
 			table.index(["status", "created_at"], "idx_leads_status_created_at");
 
 			// Composite index proposal_id + status for per-proposal metrics
-			table.index(
-				["proposal_id", "status"],
-				"idx_leads_proposal_id_status",
-			);
+			table.index(["proposal_id", "status"], "idx_leads_proposal_id_status");
 		});
 	}
 
@@ -60,10 +54,7 @@ export default class extends BaseSchema {
 
 		this.schema.alterTable("leads", (table) => {
 			table.dropIndex(["created_at"], "idx_leads_created_at_desc");
-			table.dropIndex(
-				["status", "created_at"],
-				"idx_leads_status_created_at",
-			);
+			table.dropIndex(["status", "created_at"], "idx_leads_status_created_at");
 			table.dropIndex(
 				["proposal_id", "status"],
 				"idx_leads_proposal_id_status",

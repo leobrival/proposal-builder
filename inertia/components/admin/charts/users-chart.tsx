@@ -81,7 +81,12 @@ export function UsersChart({ data }: UsersChartProps) {
 								axisLine={false}
 								tickFormatter={(value) => value.slice(0, 6)}
 							/>
-							<YAxis tickLine={false} axisLine={false} tickMargin={8} width={30} />
+							<YAxis
+								tickLine={false}
+								axisLine={false}
+								tickMargin={8}
+								width={30}
+							/>
 							<ChartTooltip
 								cursor={{ fill: "hsl(var(--muted))", opacity: 0.3 }}
 								content={<ChartTooltipContent hideLabel />}
@@ -97,7 +102,11 @@ export function UsersChart({ data }: UsersChartProps) {
 					</ChartContainer>
 				</CardContent>
 				<CardFooter className="flex items-center justify-between">
-					<Button variant="outline" size="sm" onClick={() => setIsModalOpen(true)}>
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => setIsModalOpen(true)}
+					>
 						View All
 					</Button>
 					<DropdownMenu>
@@ -131,7 +140,12 @@ export function UsersChart({ data }: UsersChartProps) {
 									tickMargin={10}
 									axisLine={false}
 								/>
-								<YAxis tickLine={false} axisLine={false} tickMargin={8} width={30} />
+								<YAxis
+									tickLine={false}
+									axisLine={false}
+									tickMargin={8}
+									width={30}
+								/>
 								<ChartTooltip
 									cursor={{ fill: "hsl(var(--muted))", opacity: 0.3 }}
 									content={<ChartTooltipContent hideLabel />}

@@ -1,8 +1,13 @@
 import vine from "@vinejs/vine";
 
+/**
+ * Validator for user registration
+ * Validates firstName, lastName, email uniqueness, and password strength
+ */
 export const registerValidator = vine.compile(
 	vine.object({
-		fullName: vine.string().trim().minLength(2).maxLength(255),
+		firstName: vine.string().trim().minLength(1).maxLength(255),
+		lastName: vine.string().trim().minLength(1).maxLength(255),
 		email: vine
 			.string()
 			.email()
@@ -12,13 +17,5 @@ export const registerValidator = vine.compile(
 				return !user;
 			}),
 		password: vine.string().minLength(8).maxLength(255),
-	}),
-);
-
-export const loginValidator = vine.compile(
-	vine.object({
-		email: vine.string().email(),
-		password: vine.string(),
-		remember: vine.boolean().optional(),
 	}),
 );

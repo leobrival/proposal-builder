@@ -5,19 +5,63 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { AdminLayout } from "~/components/admin/admin-layout";
 
 import { TabbedChartCard } from "~/components/admin/chart-card";
+import { CountriesCard } from "~/components/admin/countries-card";
+import { DevicesBrowsersCard } from "~/components/admin/devices-browsers-card";
 import { MetricsCard } from "~/components/admin/metrics-card";
+import { OSCard } from "~/components/admin/os-card";
+import {
+	type DateRangeTimestamp,
+	getPeriodLabel,
+	PeriodFilter,
+	presetToDateRange,
+} from "~/components/admin/period-filter";
 import { RecentProposalsCard } from "~/components/admin/recent-proposals-card";
 import { RecentUsersCard } from "~/components/admin/recent-users-card";
-import { DevicesBrowsersCard } from "~/components/admin/devices-browsers-card";
-import { CountriesCard } from "~/components/admin/countries-card";
-import { OSCard } from "~/components/admin/os-card";
-import { TrafficSourcesCard } from "~/components/admin/traffic-sources-card";
 import { RoutesCard } from "~/components/admin/routes-card";
 import { SiteStatusBar } from "~/components/admin/site-status-bar";
-import { type Period, PeriodFilter } from "~/components/admin/period-filter";
+import { TrafficSourcesCard } from "~/components/admin/traffic-sources-card";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+
+interface Country {
+	id: string;
+	name: string;
+	code: string;
+	users: number;
+	percentage: number;
+}
+
+interface Device {
+	id: string;
+	name: string;
+	type: "desktop" | "mobile" | "tablet";
+	sessions: number;
+	percentage: number;
+}
+
+interface Browser {
+	id: string;
+	name: string;
+	icon: string;
+	sessions: number;
+	percentage: number;
+}
+
+interface OperatingSystem {
+	id: string;
+	name: string;
+	icon: string;
+	sessions: number;
+	percentage: number;
+}
+
+interface SessionAnalytics {
+	countries: Country[];
+	devices: Device[];
+	browsers: Browser[];
+	operatingSystems: OperatingSystem[];
+}
 
 interface DashboardProps {
 	northStar: {
@@ -72,12 +116,20 @@ interface DashboardProps {
 		createdAt: string;
 	}>;
 	chartData: {
-		dailyUsers: Array<{ date: string; users: number; free: number; paid: number }>;
+		dailyUsers: Array<{
+			date: string;
+			users: number;
+			free: number;
+			paid: number;
+		}>;
 		dailyProposals: Array<{ date: string; published: number; draft: number }>;
 
 		proposalsByStatus: Array<{ status: string; count: number; fill: string }>;
 	};
-	period: Period;
+	dateRange: {
+		from: number;
+		to: number;
+	};
 }
 
 // Create transmit instance (singleton)
@@ -87,17 +139,14 @@ const transmit = new Transmit({
 
 export default function AdminDashboard(props: DashboardProps) {
 	const [data, setData] = useState(props);
-	const [period, setPeriod] = useState<Period>(props.period);
+	const [dateRange, setDateRange] = useState<DateRangeTimestamp>(
+		props.dateRange || presetToDateRange("7d"),
+	);
 	const [isLoading, setIsLoading] = useState(false);
 	const [isConnected, setIsConnected] = useState(false);
 	const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
-
-	const formatDate = (dateStr: string) => {
-		return new Date(dateStr).toLocaleDateString("fr-FR", {
-			month: "short",
-			day: "numeric",
-		});
-	};
+	const [sessionAnalytics, setSessionAnalytics] =
+		useState<SessionAnalytics | null>(null);
 
 	const formatTime = (date: Date) => {
 		return date.toLocaleTimeString("fr-FR", {
@@ -107,48 +156,75 @@ export default function AdminDashboard(props: DashboardProps) {
 		});
 	};
 
-	// Fetch metrics from API
-	const fetchMetrics = useCallback(async (selectedPeriod: Period) => {
-		setIsLoading(true);
-		try {
-			const response = await fetch(
-				`/admin/api/metrics?period=${selectedPeriod}`,
-			);
-			if (response.ok) {
-				const newData = await response.json();
-				setData({ ...newData, period: selectedPeriod });
-				setLastUpdate(new Date());
+	// Fetch session analytics from API
+	const fetchSessionAnalytics = useCallback(
+		async (range: DateRangeTimestamp) => {
+			try {
+				const response = await fetch(
+					`/admin/api/session-analytics?from=${range.from}&to=${range.to}`,
+				);
+				if (response.ok) {
+					const analyticsData = await response.json();
+					setSessionAnalytics(analyticsData);
+				}
+			} catch (error) {
+				console.error("Failed to fetch session analytics:", error);
 			}
-		} catch (error) {
-			console.error("Failed to fetch metrics:", error);
-		} finally {
-			setIsLoading(false);
-		}
-	}, []);
+		},
+		[],
+	);
+
+	// Fetch metrics from API
+	const fetchMetrics = useCallback(
+		async (range: DateRangeTimestamp) => {
+			setIsLoading(true);
+			try {
+				const [metricsResponse] = await Promise.all([
+					fetch(`/admin/api/metrics?from=${range.from}&to=${range.to}`),
+					fetchSessionAnalytics(range),
+				]);
+				if (metricsResponse.ok) {
+					const newData = await metricsResponse.json();
+					setData({ ...newData, dateRange: range });
+					setLastUpdate(new Date());
+				}
+			} catch (error) {
+				console.error("Failed to fetch metrics:", error);
+			} finally {
+				setIsLoading(false);
+			}
+		},
+		[fetchSessionAnalytics],
+	);
 
 	// Handle period change - update URL and fetch new data
-	const handlePeriodChange = (newPeriod: Period) => {
-		setPeriod(newPeriod);
+	const handlePeriodChange = (newRange: DateRangeTimestamp) => {
+		setDateRange(newRange);
 
-		// Update URL with new period parameter
+		// Update URL with new date range parameters
 		router.get(
 			"/admin/dashboard",
-			{ period: newPeriod },
+			{ from: newRange.from, to: newRange.to },
 			{
 				preserveState: true,
 				preserveScroll: true,
 				replace: true,
 				only: [], // Don't reload page data, we fetch via API
-			}
+			},
 		);
 
-		fetchMetrics(newPeriod);
+		fetchMetrics(newRange);
 	};
 
 	// Manual refresh
 	const handleRefresh = () => {
-		fetchMetrics(period);
+		fetchMetrics(dateRange);
 	};
+
+	// Load session analytics on initial render
+	useEffect(() => {
+		fetchSessionAnalytics(dateRange);
+	}, []);
 
 	// Subscribe to real-time updates
 	useEffect(() => {
@@ -168,7 +244,7 @@ export default function AdminDashboard(props: DashboardProps) {
 			if (message.type === "metrics_update" && message.payload) {
 				try {
 					const newData = JSON.parse(message.payload) as DashboardProps;
-					setData({ ...newData, period });
+					setData({ ...newData, dateRange });
 					setLastUpdate(new Date());
 				} catch (e) {
 					console.error("Failed to parse metrics payload:", e);
@@ -180,10 +256,18 @@ export default function AdminDashboard(props: DashboardProps) {
 			subscription.delete();
 			setIsConnected(false);
 		};
-	}, [period]);
+	}, [dateRange]);
 
 	// Memoize derived data to prevent unnecessary re-renders
-	const { northStar, acquisition, activation, retention, recentUsers, recentProposals, chartData } = useMemo(() => data, [data]);
+	const {
+		northStar,
+		acquisition,
+		activation,
+		retention,
+		recentUsers,
+		recentProposals,
+		chartData,
+	} = useMemo(() => data, [data]);
 
 	return (
 		<AdminLayout
@@ -203,7 +287,7 @@ export default function AdminDashboard(props: DashboardProps) {
 			{/* Header with filters and status */}
 			<div className="mb-6 flex flex-wrap items-center justify-between gap-4">
 				<div className="flex items-center gap-4">
-					<PeriodFilter value={period} onChange={handlePeriodChange} />
+					<PeriodFilter value={dateRange} onChange={handlePeriodChange} />
 					<Button
 						variant="outline"
 						size="sm"
@@ -245,8 +329,12 @@ export default function AdminDashboard(props: DashboardProps) {
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<div className={`flex items-baseline gap-4 transition-opacity duration-300 ${isLoading ? "opacity-50" : "opacity-100"}`}>
-						<span className="text-4xl font-bold tabular-nums">{northStar.current}</span>
+					<div
+						className={`flex items-baseline gap-4 transition-opacity duration-300 ${isLoading ? "opacity-50" : "opacity-100"}`}
+					>
+						<span className="text-4xl font-bold tabular-nums">
+							{northStar.current}
+						</span>
 						<span className="text-muted-foreground">
 							/ {northStar.target} target
 						</span>
@@ -312,7 +400,9 @@ export default function AdminDashboard(props: DashboardProps) {
 			</div>
 
 			{/* Activity Charts */}
-			<div className={`mb-8 transition-opacity duration-300 ${isLoading ? "opacity-60" : "opacity-100"}`}>
+			<div
+				className={`mb-8 transition-opacity duration-300 ${isLoading ? "opacity-60" : "opacity-100"}`}
+			>
 				<TabbedChartCard
 					views={[
 						{
@@ -330,16 +420,25 @@ export default function AdminDashboard(props: DashboardProps) {
 							metrics: [
 								{
 									label: "Nouveaux utilisateurs",
-									value: chartData.dailyUsers.reduce((sum, d) => sum + d.users, 0),
+									value: chartData.dailyUsers.reduce(
+										(sum, d) => sum + d.users,
+										0,
+									),
 									trend: acquisition.trend,
 								},
 								{
 									label: "Gratuits",
-									value: chartData.dailyUsers.reduce((sum, d) => sum + d.free, 0),
+									value: chartData.dailyUsers.reduce(
+										(sum, d) => sum + d.free,
+										0,
+									),
 								},
 								{
 									label: "Payants",
-									value: chartData.dailyUsers.reduce((sum, d) => sum + d.paid, 0),
+									value: chartData.dailyUsers.reduce(
+										(sum, d) => sum + d.paid,
+										0,
+									),
 								},
 							],
 						},
@@ -348,8 +447,16 @@ export default function AdminDashboard(props: DashboardProps) {
 							label: "Proposals",
 							data: chartData.dailyProposals,
 							series: [
-								{ key: "published", label: "Publiées", color: "hsl(142, 71%, 45%)" },
-								{ key: "draft", label: "Brouillons", color: "hsl(45, 93%, 47%)" },
+								{
+									key: "published",
+									label: "Publiées",
+									color: "hsl(142, 71%, 45%)",
+								},
+								{
+									key: "draft",
+									label: "Brouillons",
+									color: "hsl(45, 93%, 47%)",
+								},
 							],
 							xAxisKey: "date",
 							filterKey: "date",
@@ -357,16 +464,25 @@ export default function AdminDashboard(props: DashboardProps) {
 							metrics: [
 								{
 									label: "Proposals créées",
-									value: chartData.dailyProposals.reduce((sum, d) => sum + d.published + d.draft, 0),
+									value: chartData.dailyProposals.reduce(
+										(sum, d) => sum + d.published + d.draft,
+										0,
+									),
 									trend: northStar.trend,
 								},
 								{
 									label: "Publiées",
-									value: chartData.dailyProposals.reduce((sum, d) => sum + d.published, 0),
+									value: chartData.dailyProposals.reduce(
+										(sum, d) => sum + d.published,
+										0,
+									),
 								},
 								{
 									label: "Brouillons",
-									value: chartData.dailyProposals.reduce((sum, d) => sum + d.draft, 0),
+									value: chartData.dailyProposals.reduce(
+										(sum, d) => sum + d.draft,
+										0,
+									),
 								},
 							],
 						},
@@ -376,7 +492,7 @@ export default function AdminDashboard(props: DashboardProps) {
 					stacked={false}
 					footer={
 						<span>
-							Activité sur la période sélectionnée ({period === "7d" ? "7 jours" : period === "15d" ? "15 jours" : period === "30d" ? "30 jours" : period === "90d" ? "3 mois" : period === "180d" ? "6 mois" : "12 mois"})
+							Activite sur la periode selectionnee ({getPeriodLabel(dateRange)})
 						</span>
 					}
 				/>
@@ -390,9 +506,12 @@ export default function AdminDashboard(props: DashboardProps) {
 
 			{/* Analytics Cards */}
 			<div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-				<CountriesCard />
-				<DevicesBrowsersCard />
-				<OSCard />
+				<CountriesCard countries={sessionAnalytics?.countries} />
+				<DevicesBrowsersCard
+					devices={sessionAnalytics?.devices}
+					browsers={sessionAnalytics?.browsers}
+				/>
+				<OSCard operatingSystems={sessionAnalytics?.operatingSystems} />
 			</div>
 
 			<div className="mb-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">

@@ -1,16 +1,21 @@
-import { Head, useForm } from "@inertiajs/react";
+import { Head, useForm, usePage } from "@inertiajs/react";
 import type { FormEvent } from "react";
 import { useState } from "react";
+import { AppHeader } from "../components/app-header";
+import { ThemeProvider } from "../components/theme-provider";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
+import type { SharedProps } from "../types";
 
-interface LandingProps {
+interface LandingProps extends SharedProps {
 	waitlistCount: number;
 }
 
 export default function Landing({ waitlistCount }: LandingProps) {
+	const { user } = usePage<LandingProps>().props;
 	const [submitSuccess, setSubmitSuccess] = useState(false);
 	const [submitMessage, setSubmitMessage] = useState("");
+	const isAdmin = user?.isAdmin ?? false;
 
 	const { data, setData, post, processing, errors, reset } = useForm({
 		email: "",
@@ -39,7 +44,15 @@ export default function Landing({ waitlistCount }: LandingProps) {
 		<>
 			<Head title="Spons Easy - Proposals de Sponsoring Professionnelles" />
 
-			<div className="min-h-screen bg-background">
+			{user && (
+				<ThemeProvider defaultTheme="system" storageKey="sponseasy-theme">
+					<div className="fixed top-0 left-0 right-0 z-50">
+						<AppHeader showLogo />
+					</div>
+				</ThemeProvider>
+			)}
+
+			<div className={`min-h-screen bg-background ${user ? "pt-14" : ""}`}>
 				{/* Hero Section */}
 				<section className="relative px-4 py-16 md:py-24 lg:py-32">
 					<div className="mx-auto max-w-6xl">

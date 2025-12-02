@@ -1,5 +1,6 @@
 import type { HttpContext } from "@adonisjs/core/http";
 import domainService from "#services/domain_service";
+import proposalService from "#services/proposal_service";
 
 export default class SubdomainController {
 	/**
@@ -21,8 +22,7 @@ export default class SubdomainController {
 		}
 
 		// Increment view count
-		proposal.viewCount = (proposal.viewCount || 0) + 1;
-		await proposal.save();
+		await proposalService.incrementViewCount(proposal);
 
 		// Load relations
 		await proposal.load("tiers", (query) => {

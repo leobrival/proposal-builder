@@ -1,3 +1,4 @@
+import app from "@adonisjs/core/services/app";
 import { defineConfig } from "@adonisjs/shield";
 
 const shieldConfig = defineConfig({
@@ -16,8 +17,8 @@ const shieldConfig = defineConfig({
 	 * to learn more
 	 */
 	csrf: {
-		enabled: true,
-		exceptRoutes: [],
+		enabled: !app.inTest,
+		exceptRoutes: ["/api/events/*", "/admin/api/*"],
 		enableXsrfCookie: true,
 		methods: ["POST", "PUT", "PATCH", "DELETE"],
 	},

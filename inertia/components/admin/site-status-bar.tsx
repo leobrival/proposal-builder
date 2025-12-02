@@ -17,7 +17,10 @@ interface SiteStatusBarProps {
 	lastSyncAt?: Date | null;
 }
 
-const syncStatusConfig: Record<SyncStatus, { color: string; label: string; description: string }> = {
+const syncStatusConfig: Record<
+	SyncStatus,
+	{ color: string; label: string; description: string }
+> = {
 	synced: {
 		color: "bg-green-500",
 		label: "Synchronisé",
@@ -83,8 +86,12 @@ export function SiteStatusBar({
 			<Tooltip>
 				<TooltipTrigger asChild>
 					<div className="flex items-center gap-1.5 cursor-help">
-						<span className={`inline-flex h-2 w-2 rounded-full ${statusConfig.color}`} />
-						<span className={`${syncStatus === "synced" ? "text-green-500" : syncStatus === "error" ? "text-red-500" : "text-muted-foreground"}`}>
+						<span
+							className={`inline-flex h-2 w-2 rounded-full ${statusConfig.color}`}
+						/>
+						<span
+							className={`${syncStatus === "synced" ? "text-green-500" : syncStatus === "error" ? "text-red-500" : "text-muted-foreground"}`}
+						>
 							{onlineUsers} online
 						</span>
 					</div>
@@ -92,7 +99,9 @@ export function SiteStatusBar({
 				<TooltipContent side="bottom" className="text-xs">
 					<div className="space-y-1">
 						<div className="font-medium">{statusConfig.label}</div>
-						<div className="text-muted-foreground">{statusConfig.description}</div>
+						<div className="text-muted-foreground">
+							{statusConfig.description}
+						</div>
 						{lastSyncAt && (
 							<div className="text-muted-foreground">
 								Dernière sync : {formatLastSync(lastSyncAt)}

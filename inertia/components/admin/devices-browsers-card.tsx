@@ -1,7 +1,11 @@
 "use client";
 
 import { Chrome, Globe, Monitor, Smartphone, Tablet } from "lucide-react";
-import { TabbedDataCard, type DataCardColumn, type DataCardTab } from "./data-card";
+import {
+	type DataCardColumn,
+	type DataCardTab,
+	TabbedDataCard,
+} from "./data-card";
 
 // Device types
 interface Device {
@@ -31,15 +35,45 @@ interface DevicesBrowsersCardProps {
 
 // Mock data
 const mockDevices: Device[] = [
-	{ id: "d1", name: "Desktop", type: "desktop", sessions: 4521, percentage: 58.2 },
-	{ id: "d2", name: "Mobile", type: "mobile", sessions: 2847, percentage: 36.7 },
+	{
+		id: "d1",
+		name: "Desktop",
+		type: "desktop",
+		sessions: 4521,
+		percentage: 58.2,
+	},
+	{
+		id: "d2",
+		name: "Mobile",
+		type: "mobile",
+		sessions: 2847,
+		percentage: 36.7,
+	},
 	{ id: "d3", name: "Tablet", type: "tablet", sessions: 396, percentage: 5.1 },
 ];
 
 const mockBrowsers: Browser[] = [
-	{ id: "b1", name: "Chrome", icon: "chrome", sessions: 4892, percentage: 63.0 },
-	{ id: "b2", name: "Safari", icon: "safari", sessions: 1789, percentage: 23.0 },
-	{ id: "b3", name: "Firefox", icon: "firefox", sessions: 621, percentage: 8.0 },
+	{
+		id: "b1",
+		name: "Chrome",
+		icon: "chrome",
+		sessions: 4892,
+		percentage: 63.0,
+	},
+	{
+		id: "b2",
+		name: "Safari",
+		icon: "safari",
+		sessions: 1789,
+		percentage: 23.0,
+	},
+	{
+		id: "b3",
+		name: "Firefox",
+		icon: "firefox",
+		sessions: 621,
+		percentage: 8.0,
+	},
 	{ id: "b4", name: "Edge", icon: "edge", sessions: 388, percentage: 5.0 },
 	{ id: "b5", name: "Other", icon: "other", sessions: 74, percentage: 1.0 },
 ];
@@ -98,7 +132,9 @@ const deviceColumns: DataCardColumn<Device>[] = [
 		key: "sessions",
 		header: "Sessions",
 		render: (device) => (
-			<span className="text-muted-foreground">{formatNumber(device.sessions)}</span>
+			<span className="text-muted-foreground">
+				{formatNumber(device.sessions)}
+			</span>
 		),
 		className: "text-right",
 	},
@@ -144,7 +180,9 @@ const browserColumns: DataCardColumn<Browser>[] = [
 		key: "sessions",
 		header: "Sessions",
 		render: (browser) => (
-			<span className="text-muted-foreground">{formatNumber(browser.sessions)}</span>
+			<span className="text-muted-foreground">
+				{formatNumber(browser.sessions)}
+			</span>
 		),
 		className: "text-right",
 	},
@@ -197,7 +235,11 @@ export function DevicesBrowsersCard({
 			exportHeaders: ["Device", "Sessions", "Percentage"],
 			exportRow: (item) => {
 				const device = item as Device;
-				return [device.name, device.sessions.toString(), `${device.percentage}%`];
+				return [
+					device.name,
+					device.sessions.toString(),
+					`${device.percentage}%`,
+				];
 			},
 		},
 		{
@@ -215,13 +257,18 @@ export function DevicesBrowsersCard({
 			exportHeaders: ["Browser", "Sessions", "Percentage"],
 			exportRow: (item) => {
 				const browser = item as Browser;
-				return [browser.name, browser.sessions.toString(), `${browser.percentage}%`];
+				return [
+					browser.name,
+					browser.sessions.toString(),
+					`${browser.percentage}%`,
+				];
 			},
 		},
 	];
 
 	return (
 		<TabbedDataCard
+			id="devices-browsers"
 			tabs={tabs}
 			defaultTab="devices"
 			modalTitle="Device & Browser Analytics"

@@ -16,13 +16,17 @@ export default class CreateAdmin extends BaseCommand {
 	@flags.string({ description: "Admin password", alias: "p" })
 	declare password: string;
 
-	@flags.string({ description: "Admin full name", alias: "n" })
-	declare name: string;
+	@flags.string({ description: "Admin first name", alias: "f" })
+	declare firstName: string;
+
+	@flags.string({ description: "Admin last name", alias: "l" })
+	declare lastName: string;
 
 	async run() {
 		const email = this.email;
 		const password = this.password || "admin123";
-		const fullName = this.name || "Admin User";
+		const firstName = this.firstName || "Admin";
+		const lastName = this.lastName || "User";
 
 		// Check if user already exists
 		const existingUser = await User.findBy("email", email);
@@ -39,7 +43,8 @@ export default class CreateAdmin extends BaseCommand {
 		const user = await User.create({
 			email,
 			password,
-			fullName,
+			firstName,
+			lastName,
 			role: "admin",
 			isActive: true,
 		});

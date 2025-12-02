@@ -15,7 +15,8 @@ import { PasswordInput } from "../../components/ui/password-input";
 
 export default function Register() {
 	const { data, setData, post, processing, errors } = useForm({
-		fullName: "",
+		firstName: "",
+		lastName: "",
 		email: "",
 		password: "",
 	});
@@ -33,24 +34,44 @@ export default function Register() {
 					<CardHeader className="text-center">
 						<CardTitle className="text-2xl">Inscription</CardTitle>
 						<CardDescription>
-							Créez votre compte Sponseasy gratuitement
+							Creez votre compte Sponseasy gratuitement
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
 						<form onSubmit={handleSubmit} className="space-y-4">
-							<div className="space-y-2">
-								<Label htmlFor="fullName">Nom complet</Label>
-								<Input
-									id="fullName"
-									type="text"
-									value={data.fullName}
-									onChange={(e) => setData("fullName", e.target.value)}
-									placeholder="Jean Dupont"
-									required
-								/>
-								{errors.fullName && (
-									<p className="text-sm text-destructive">{errors.fullName}</p>
-								)}
+							<div className="grid grid-cols-2 gap-4">
+								<div className="space-y-2">
+									<Label htmlFor="firstName">Prenom</Label>
+									<Input
+										id="firstName"
+										type="text"
+										value={data.firstName}
+										onChange={(e) => setData("firstName", e.target.value)}
+										placeholder="Jean"
+										required
+									/>
+									{errors.firstName && (
+										<p className="text-sm text-destructive">
+											{errors.firstName}
+										</p>
+									)}
+								</div>
+								<div className="space-y-2">
+									<Label htmlFor="lastName">Nom</Label>
+									<Input
+										id="lastName"
+										type="text"
+										value={data.lastName}
+										onChange={(e) => setData("lastName", e.target.value)}
+										placeholder="Dupont"
+										required
+									/>
+									{errors.lastName && (
+										<p className="text-sm text-destructive">
+											{errors.lastName}
+										</p>
+									)}
+								</div>
 							</div>
 							<div className="space-y-2">
 								<Label htmlFor="email">Email</Label>
@@ -79,7 +100,7 @@ export default function Register() {
 									<p className="text-sm text-destructive">{errors.password}</p>
 								)}
 								<p className="text-xs text-muted-foreground">
-									Minimum 8 caractères
+									Minimum 8 caracteres
 								</p>
 							</div>
 							<Button type="submit" disabled={processing} className="w-full">
@@ -87,7 +108,7 @@ export default function Register() {
 							</Button>
 						</form>
 						<p className="text-center text-sm text-muted-foreground mt-4">
-							Déjà un compte ?{" "}
+							Deja un compte ?{" "}
 							<Link href="/login" className="text-primary hover:underline">
 								Se connecter
 							</Link>

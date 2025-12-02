@@ -42,9 +42,7 @@ export function GrowthChart({ data, period }: GrowthChartProps) {
 
 	const userGrowth =
 		firstData.users > 0
-			? Math.round(
-					((lastData.users - firstData.users) / firstData.users) * 100,
-				)
+			? Math.round(((lastData.users - firstData.users) / firstData.users) * 100)
 			: lastData.users > 0
 				? 100
 				: 0;

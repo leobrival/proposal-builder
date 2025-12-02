@@ -2,22 +2,27 @@
 
 import { router } from "@inertiajs/react";
 import {
-	AreaChart,
+	AreaChartIcon,
+	BarChart3,
+	LineChartIcon,
+	PieChartIcon,
+} from "lucide-react";
+import { type ReactNode, useState } from "react";
+import {
 	Area,
-	BarChart,
+	AreaChart,
 	Bar,
-	LineChart,
-	Line,
-	PieChart,
-	Pie,
-	Cell,
+	BarChart,
 	CartesianGrid,
+	Cell,
+	Line,
+	LineChart,
+	Pie,
+	PieChart,
+	ResponsiveContainer,
 	XAxis,
 	YAxis,
-	ResponsiveContainer,
 } from "recharts";
-import { type ReactNode, useState } from "react";
-
 import {
 	Card,
 	CardContent,
@@ -34,13 +39,9 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from "~/components/ui/chart";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Separator } from "~/components/ui/separator";
-import {
-	ToggleGroup,
-	ToggleGroupItem,
-} from "~/components/ui/toggle-group";
-import { AreaChartIcon, BarChart3, LineChartIcon, PieChartIcon } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 
 // Chart types
 export type ChartType = "line" | "area" | "bar" | "pie";
@@ -118,7 +119,9 @@ export interface ChartCardProps<T extends ChartDataPoint = ChartDataPoint> {
 }
 
 // Props for tabbed ChartCard
-export interface TabbedChartCardProps<T extends ChartDataPoint = ChartDataPoint> {
+export interface TabbedChartCardProps<
+	T extends ChartDataPoint = ChartDataPoint,
+> {
 	// Tabs configuration
 	views: ChartView<T>[];
 	defaultView?: string;
@@ -157,14 +160,20 @@ const chartTypeIcons: Record<ChartType, ReactNode> = {
 };
 
 // Format metric value
-function formatMetricValue(value: number | string, format?: "number" | "percent" | "currency"): string {
+function formatMetricValue(
+	value: number | string,
+	format?: "number" | "percent" | "currency",
+): string {
 	if (typeof value === "string") return value;
 
 	switch (format) {
 		case "percent":
 			return `${value}%`;
 		case "currency":
-			return new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" }).format(value);
+			return new Intl.NumberFormat("fr-FR", {
+				style: "currency",
+				currency: "EUR",
+			}).format(value);
 		default:
 			return new Intl.NumberFormat("fr-FR").format(value);
 	}
@@ -185,7 +194,8 @@ function TrendBadge({ trend }: { trend: number }) {
 						: "bg-red-500/20 text-red-500"
 			}`}
 		>
-			{isPositive ? "+" : ""}{trend}%
+			{isPositive ? "+" : ""}
+			{trend}%
 		</span>
 	);
 }
@@ -198,7 +208,9 @@ function MetricsHeader({ metrics }: { metrics: ChartMetric[] }) {
 		<div className="flex divide-x">
 			{metrics.map((metric, index) => (
 				<div key={index} className="flex-1 px-4 py-3 first:pl-0 last:pr-0">
-					<div className="text-sm text-muted-foreground mb-1">{metric.label}</div>
+					<div className="text-sm text-muted-foreground mb-1">
+						{metric.label}
+					</div>
 					<div className="flex items-center gap-2">
 						<span className="text-2xl font-bold tabular-nums">
 							{formatMetricValue(metric.value, metric.format)}
@@ -261,7 +273,7 @@ export function ChartCard<T extends ChartDataPoint>({
 					preserveScroll: true,
 					replace: true,
 					only: [],
-				}
+				},
 			);
 		}
 	};
@@ -278,7 +290,9 @@ export function ChartCard<T extends ChartDataPoint>({
 			case "line":
 				return (
 					<LineChart {...commonProps}>
-						{showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
+						{showGrid && (
+							<CartesianGrid strokeDasharray="3 3" vertical={false} />
+						)}
 						{showXAxis && (
 							<XAxis
 								dataKey={xAxisKey}
@@ -310,7 +324,12 @@ export function ChartCard<T extends ChartDataPoint>({
 								stroke={s.color}
 								strokeWidth={2}
 								dot={{ fill: s.color, r: 3 }}
-								activeDot={{ r: 5, fill: s.color, onClick: (_, payload) => handleChartClick(payload.payload as T) }}
+								activeDot={{
+									r: 5,
+									fill: s.color,
+									onClick: (_, payload) =>
+										handleChartClick(payload.payload as T),
+								}}
 							/>
 						))}
 					</LineChart>
@@ -319,7 +338,9 @@ export function ChartCard<T extends ChartDataPoint>({
 			case "area":
 				return (
 					<AreaChart {...commonProps}>
-						{showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
+						{showGrid && (
+							<CartesianGrid strokeDasharray="3 3" vertical={false} />
+						)}
 						{showXAxis && (
 							<XAxis
 								dataKey={xAxisKey}
@@ -353,7 +374,12 @@ export function ChartCard<T extends ChartDataPoint>({
 								fillOpacity={0.2}
 								strokeWidth={2}
 								stackId={stacked ? "stack" : undefined}
-								activeDot={{ r: 5, fill: s.color, onClick: (_, payload) => handleChartClick(payload.payload as T) }}
+								activeDot={{
+									r: 5,
+									fill: s.color,
+									onClick: (_, payload) =>
+										handleChartClick(payload.payload as T),
+								}}
 							/>
 						))}
 					</AreaChart>
@@ -362,7 +388,9 @@ export function ChartCard<T extends ChartDataPoint>({
 			case "bar":
 				return (
 					<BarChart {...commonProps}>
-						{showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
+						{showGrid && (
+							<CartesianGrid strokeDasharray="3 3" vertical={false} />
+						)}
 						{showXAxis && (
 							<XAxis
 								dataKey={xAxisKey}
@@ -399,7 +427,7 @@ export function ChartCard<T extends ChartDataPoint>({
 					</BarChart>
 				);
 
-			case "pie":
+			case "pie": {
 				// For pie chart, we need to transform data differently
 				const pieData = series.map((s) => ({
 					name: s.label,
@@ -427,12 +455,19 @@ export function ChartCard<T extends ChartDataPoint>({
 									fill={entry.color}
 									onClick={() => {
 										if (filterKey) {
-											const currentParams = new URLSearchParams(window.location.search);
+											const currentParams = new URLSearchParams(
+												window.location.search,
+											);
 											currentParams.set(filterKey, entry.key);
 											router.get(
 												window.location.pathname,
 												Object.fromEntries(currentParams.entries()),
-												{ preserveState: true, preserveScroll: true, replace: true, only: [] }
+												{
+													preserveState: true,
+													preserveScroll: true,
+													replace: true,
+													only: [],
+												},
 											);
 										}
 									}}
@@ -443,6 +478,7 @@ export function ChartCard<T extends ChartDataPoint>({
 						{showLegend && <ChartLegend content={<ChartLegendContent />} />}
 					</PieChart>
 				);
+			}
 
 			default:
 				return null;
@@ -464,7 +500,11 @@ export function ChartCard<T extends ChartDataPoint>({
 						size="sm"
 					>
 						{allowedChartTypes.map((type) => (
-							<ToggleGroupItem key={type} value={type} aria-label={`${type} chart`}>
+							<ToggleGroupItem
+								key={type}
+								value={type}
+								aria-label={`${type} chart`}
+							>
 								{chartTypeIcons[type]}
 							</ToggleGroupItem>
 						))}
@@ -505,7 +545,9 @@ export function TabbedChartCard<T extends ChartDataPoint>({
 	yAxisFormatter,
 	tooltipFormatter,
 }: TabbedChartCardProps<T>) {
-	const [activeView, setActiveView] = useState(defaultView || views[0]?.id || "");
+	const [activeView, setActiveView] = useState(
+		defaultView || views[0]?.id || "",
+	);
 	const [chartType, setChartType] = useState<ChartType>(defaultChartType);
 
 	const currentView = views.find((v) => v.id === activeView) || views[0];
@@ -525,7 +567,7 @@ export function TabbedChartCard<T extends ChartDataPoint>({
 					preserveScroll: true,
 					replace: true,
 					only: [],
-				}
+				},
 			);
 		}
 	};
@@ -546,7 +588,9 @@ export function TabbedChartCard<T extends ChartDataPoint>({
 				return (
 					<ChartContainer config={viewConfig} className="h-[250px] w-full">
 						<LineChart {...commonProps}>
-							{showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
+							{showGrid && (
+								<CartesianGrid strokeDasharray="3 3" vertical={false} />
+							)}
 							{showXAxis && (
 								<XAxis
 									dataKey={xAxisKey}
@@ -578,7 +622,12 @@ export function TabbedChartCard<T extends ChartDataPoint>({
 									stroke={s.color}
 									strokeWidth={2}
 									dot={{ fill: s.color, r: 3 }}
-									activeDot={{ r: 5, fill: s.color, onClick: (_, payload) => handleChartClick(payload.payload as T, view) }}
+									activeDot={{
+										r: 5,
+										fill: s.color,
+										onClick: (_, payload) =>
+											handleChartClick(payload.payload as T, view),
+									}}
 								/>
 							))}
 						</LineChart>
@@ -589,7 +638,9 @@ export function TabbedChartCard<T extends ChartDataPoint>({
 				return (
 					<ChartContainer config={viewConfig} className="h-[250px] w-full">
 						<AreaChart {...commonProps}>
-							{showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
+							{showGrid && (
+								<CartesianGrid strokeDasharray="3 3" vertical={false} />
+							)}
 							{showXAxis && (
 								<XAxis
 									dataKey={xAxisKey}
@@ -623,7 +674,12 @@ export function TabbedChartCard<T extends ChartDataPoint>({
 									fillOpacity={0.2}
 									strokeWidth={2}
 									stackId={stacked ? "stack" : undefined}
-									activeDot={{ r: 5, fill: s.color, onClick: (_, payload) => handleChartClick(payload.payload as T, view) }}
+									activeDot={{
+										r: 5,
+										fill: s.color,
+										onClick: (_, payload) =>
+											handleChartClick(payload.payload as T, view),
+									}}
 								/>
 							))}
 						</AreaChart>
@@ -634,7 +690,9 @@ export function TabbedChartCard<T extends ChartDataPoint>({
 				return (
 					<ChartContainer config={viewConfig} className="h-[250px] w-full">
 						<BarChart {...commonProps}>
-							{showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
+							{showGrid && (
+								<CartesianGrid strokeDasharray="3 3" vertical={false} />
+							)}
 							{showXAxis && (
 								<XAxis
 									dataKey={xAxisKey}
@@ -665,14 +723,16 @@ export function TabbedChartCard<T extends ChartDataPoint>({
 									fill={s.color}
 									radius={[4, 4, 0, 0]}
 									stackId={stacked ? "stack" : undefined}
-									onClick={(payload) => handleChartClick(payload as unknown as T, view)}
+									onClick={(payload) =>
+										handleChartClick(payload as unknown as T, view)
+									}
 								/>
 							))}
 						</BarChart>
 					</ChartContainer>
 				);
 
-			case "pie":
+			case "pie": {
 				const pieData = series.map((s) => ({
 					name: s.label,
 					value: data.reduce((sum, d) => sum + (Number(d[s.key]) || 0), 0),
@@ -700,12 +760,19 @@ export function TabbedChartCard<T extends ChartDataPoint>({
 										fill={entry.color}
 										onClick={() => {
 											if (view.filterKey) {
-												const currentParams = new URLSearchParams(window.location.search);
+												const currentParams = new URLSearchParams(
+													window.location.search,
+												);
 												currentParams.set(view.filterKey, entry.key);
 												router.get(
 													window.location.pathname,
 													Object.fromEntries(currentParams.entries()),
-													{ preserveState: true, preserveScroll: true, replace: true, only: [] }
+													{
+														preserveState: true,
+														preserveScroll: true,
+														replace: true,
+														only: [],
+													},
 												);
 											}
 										}}
@@ -717,6 +784,7 @@ export function TabbedChartCard<T extends ChartDataPoint>({
 						</PieChart>
 					</ChartContainer>
 				);
+			}
 
 			default:
 				return null;
@@ -731,7 +799,9 @@ export function TabbedChartCard<T extends ChartDataPoint>({
 						{title ? (
 							<div>
 								<CardTitle>{title}</CardTitle>
-								{description && <CardDescription>{description}</CardDescription>}
+								{description && (
+									<CardDescription>{description}</CardDescription>
+								)}
 							</div>
 						) : (
 							<TabsList className="h-8">
@@ -765,11 +835,17 @@ export function TabbedChartCard<T extends ChartDataPoint>({
 							<ToggleGroup
 								type="single"
 								value={chartType}
-								onValueChange={(value) => value && setChartType(value as ChartType)}
+								onValueChange={(value) =>
+									value && setChartType(value as ChartType)
+								}
 								size="sm"
 							>
 								{allowedChartTypes.map((type) => (
-									<ToggleGroupItem key={type} value={type} aria-label={`${type} chart`}>
+									<ToggleGroupItem
+										key={type}
+										value={type}
+										aria-label={`${type} chart`}
+									>
 										{chartTypeIcons[type]}
 									</ToggleGroupItem>
 								))}
@@ -780,7 +856,11 @@ export function TabbedChartCard<T extends ChartDataPoint>({
 				<Separator />
 				{/* Metrics section */}
 				{views.map((view) => (
-					<TabsContent key={`metrics-${view.id}`} value={view.id} className="m-0">
+					<TabsContent
+						key={`metrics-${view.id}`}
+						value={view.id}
+						className="m-0"
+					>
 						{view.metrics && view.metrics.length > 0 && (
 							<>
 								<div className="px-4 pt-4">

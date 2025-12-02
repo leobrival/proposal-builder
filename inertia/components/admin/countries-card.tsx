@@ -57,7 +57,9 @@ const columns: DataCardColumn<Country>[] = [
 		key: "users",
 		header: "Utilisateurs",
 		render: (country) => (
-			<span className="text-muted-foreground">{formatNumber(country.users)}</span>
+			<span className="text-muted-foreground">
+				{formatNumber(country.users)}
+			</span>
 		),
 		className: "text-right",
 	},
@@ -83,22 +85,24 @@ const modalColumns: DataCardColumn<Country>[] = [
 	{
 		key: "name",
 		header: "Pays",
-		render: (country) => (
-			<span className="font-medium">{country.name}</span>
-		),
+		render: (country) => <span className="font-medium">{country.name}</span>,
 	},
 	{
 		key: "code",
 		header: "Code",
 		render: (country) => (
-			<span className="text-muted-foreground font-mono text-xs">{country.code}</span>
+			<span className="text-muted-foreground font-mono text-xs">
+				{country.code}
+			</span>
 		),
 	},
 	{
 		key: "users",
 		header: "Utilisateurs",
 		render: (country) => (
-			<span className="text-muted-foreground">{formatNumber(country.users)}</span>
+			<span className="text-muted-foreground">
+				{formatNumber(country.users)}
+			</span>
 		),
 		className: "text-right",
 	},
@@ -124,12 +128,15 @@ const modalColumns: DataCardColumn<Country>[] = [
 	},
 ];
 
-export function CountriesCard({ countries = mockCountries }: CountriesCardProps) {
+export function CountriesCard({
+	countries = mockCountries,
+}: CountriesCardProps) {
 	const totalUsers = countries.reduce((sum, c) => sum + c.users, 0);
 	const displayedCountries = countries.slice(0, 5);
 
 	return (
 		<DataCard
+			id="countries"
 			title="Countries"
 			count={totalUsers}
 			data={displayedCountries}

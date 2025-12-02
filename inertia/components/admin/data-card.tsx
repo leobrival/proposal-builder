@@ -1,7 +1,14 @@
 "use client";
 
 import { router } from "@inertiajs/react";
-import { Download, Ellipsis, Inbox, Loader2, Maximize2, MoreHorizontal } from "lucide-react";
+import {
+	Download,
+	Ellipsis,
+	Inbox,
+	Loader2,
+	Maximize2,
+	MoreHorizontal,
+} from "lucide-react";
 import { type ReactNode, useState } from "react";
 
 import { Button } from "~/components/ui/button";
@@ -33,12 +40,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "~/components/ui/table";
-import {
-	Tabs,
-	TabsContent,
-	TabsList,
-	TabsTrigger,
-} from "~/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import {
 	Tooltip,
 	TooltipContent,
@@ -94,6 +96,9 @@ export interface DataCardTab<T> {
 
 // Props for the DataCard component (single view - backwards compatible)
 export interface DataCardProps<T> {
+	// Card identifier for navigation
+	id?: string;
+
 	// Card header
 	title: string;
 	count?: number;
@@ -142,6 +147,9 @@ export interface DataCardProps<T> {
 
 // Props for tabbed DataCard
 export interface TabbedDataCardProps<T> {
+	// Card identifier for navigation
+	id?: string;
+
 	// Tabs configuration
 	tabs: DataCardTab<T>[];
 	defaultTab?: string;
@@ -171,11 +179,16 @@ function RowActionsMenu<T>({
 }) {
 	const [isLoading, setIsLoading] = useState<string | null>(null);
 
-	const visibleActions = actions.filter((action) => !action.show || action.show(item));
+	const visibleActions = actions.filter(
+		(action) => !action.show || action.show(item),
+	);
 
 	if (visibleActions.length === 0) return null;
 
-	const handleAction = async (action: DataCardAction<T>, e: React.MouseEvent) => {
+	const handleAction = async (
+		action: DataCardAction<T>,
+		e: React.MouseEvent,
+	) => {
 		e.stopPropagation();
 		if (action.disabled?.(item)) return;
 
@@ -202,7 +215,11 @@ function RowActionsMenu<T>({
 						<DropdownMenuItem
 							onClick={(e) => handleAction(action, e)}
 							disabled={action.disabled?.(item) || isLoading === action.id}
-							className={action.variant === "destructive" ? "text-destructive focus:text-destructive" : ""}
+							className={
+								action.variant === "destructive"
+									? "text-destructive focus:text-destructive"
+									: ""
+							}
 						>
 							{isLoading === action.id ? (
 								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -220,6 +237,7 @@ function RowActionsMenu<T>({
 
 // Single view DataCard component
 export function DataCard<T>({
+	id,
 	title,
 	count,
 	data,
@@ -267,7 +285,7 @@ export function DataCard<T>({
 					preserveScroll: true,
 					replace: true,
 					only: [],
-				}
+				},
 			);
 		}
 	};
@@ -324,7 +342,7 @@ export function DataCard<T>({
 			...exportData.map((item) =>
 				exportRow(item)
 					.map((cell) => `"${cell}"`)
-					.join(",")
+					.join(","),
 			),
 		].join("\n");
 
@@ -343,10 +361,12 @@ export function DataCard<T>({
 
 	return (
 		<>
-			<Card className="p-0 gap-0">
+			<Card id={id} className="p-0 gap-0 scroll-mt-20">
 				<CardHeader className="p-4 justify-between items-center flex flex-row">
 					<CardTitle className="flex items-center gap-2">{title}</CardTitle>
-					<span className="text-sm font-medium tabular-nums">{displayCount}</span>
+					<span className="text-sm font-medium tabular-nums">
+						{displayCount}
+					</span>
 				</CardHeader>
 				<Separator />
 				<CardContent className="p-0">
@@ -389,7 +409,7 @@ export function DataCard<T>({
 								<TableRow>
 									<td colSpan={columns.length} className="p-8">
 										<div className="flex flex-col items-center justify-center">
-											<Inbox className="h-8 w-8 text-muted-foreground/50 mb-2" />
+											<Inbox className="h-4 w-4 text-muted-foreground/50 mb-2" />
 											<span className="text-sm text-muted-foreground">
 												{emptyMessage}
 											</span>
@@ -400,7 +420,7 @@ export function DataCard<T>({
 						</TableBody>
 					</Table>
 				</CardContent>
-				<CardFooter className="flex items-center justify-center gap-2 p-4">
+				<CardFooter className="flex items-center mt-auto justify-center gap-2 p-4">
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<Button
@@ -490,9 +510,14 @@ export function DataCard<T>({
 									))}
 									{displayModalData.length === 0 && (
 										<TableRow>
-											<td colSpan={effectiveModalColumns.length + (actions ? 1 : 0)} className="p-8">
+											<td
+												colSpan={
+													effectiveModalColumns.length + (actions ? 1 : 0)
+												}
+												className="p-8"
+											>
 												<div className="flex flex-col items-center justify-center">
-													<Inbox className="h-8 w-8 text-muted-foreground/50 mb-2" />
+													<Inbox className="h-4 w-4 text-muted-foreground/50 mb-2" />
 													<span className="text-sm text-muted-foreground">
 														{emptyMessage}
 													</span>
@@ -512,6 +537,7 @@ export function DataCard<T>({
 
 // Tabbed DataCard component for multiple views
 export function TabbedDataCard<T>({
+	id,
 	tabs,
 	defaultTab,
 	modalTitle,
@@ -547,7 +573,7 @@ export function TabbedDataCard<T>({
 					preserveScroll: true,
 					replace: true,
 					only: [],
-				}
+				},
 			);
 		}
 	};
@@ -655,7 +681,7 @@ export function TabbedDataCard<T>({
 			...exportData.map((item) =>
 				tab.exportRow!(item)
 					.map((cell) => `"${cell}"`)
-					.join(",")
+					.join(","),
 			),
 		].join("\n");
 
@@ -670,19 +696,20 @@ export function TabbedDataCard<T>({
 		document.body.removeChild(link);
 	};
 
-	const effectiveModalTitle = modalTitle || `All ${currentTab?.label || "Data"}`;
+	const effectiveModalTitle =
+		modalTitle || `All ${currentTab?.label || "Data"}`;
 
 	return (
 		<>
-			<Card className="p-0 gap-0">
-				<Tabs value={activeTab} onValueChange={setActiveTab}>
+			<Card id={id} className="p-0 gap-0 scroll-mt-20">
+				<Tabs className="gap-0" value={activeTab} onValueChange={setActiveTab}>
 					<CardHeader className="p-4 justify-between items-center flex flex-row">
-						<TabsList className="h-8">
+						<TabsList className="h-8 gap-1 bg-transparent">
 							{tabs.map((tab) => (
 								<TabsTrigger
 									key={tab.id}
 									value={tab.id}
-									className="text-xs px-3"
+									className="text-sm hover-bg-gray-100 border-gray-100 px-3 text-primary data-[state=active]:bg-gray-200 data-[state=active]:font-semibold"
 								>
 									{tab.label}
 								</TabsTrigger>
@@ -707,7 +734,9 @@ export function TabbedDataCard<T>({
 														<TooltipTrigger asChild>
 															<TableRow
 																className={`border-b-0 hover:bg-muted/50 ${!tab.actions ? "cursor-pointer hover:shadow-[inset_2px_0_0_0_black]" : ""}`}
-																onClick={() => !tab.actions && handleRowClick(item, tab)}
+																onClick={() =>
+																	!tab.actions && handleRowClick(item, tab)
+																}
 															>
 																{tab.columns.map((column) => (
 																	<td
@@ -719,7 +748,10 @@ export function TabbedDataCard<T>({
 																))}
 																{tab.actions && tab.actions.length > 0 && (
 																	<td className="p-2 align-middle whitespace-nowrap w-10">
-																		<RowActionsMenu item={item} actions={tab.actions} />
+																		<RowActionsMenu
+																			item={item}
+																			actions={tab.actions}
+																		/>
 																	</td>
 																)}
 															</TableRow>
@@ -738,9 +770,10 @@ export function TabbedDataCard<T>({
 												<TableRow>
 													<td colSpan={tab.columns.length} className="p-8">
 														<div className="flex flex-col items-center justify-center">
-															<Inbox className="h-8 w-8 text-muted-foreground/50 mb-2" />
+															<Inbox className="h-4 w-4 text-muted-foreground/50 mb-2" />
 															<span className="text-sm text-muted-foreground">
-																{tab.emptyMessage || "No data found for selected period."}
+																{tab.emptyMessage ||
+																	"No data found for selected period."}
 															</span>
 														</div>
 													</td>
@@ -753,7 +786,7 @@ export function TabbedDataCard<T>({
 						})}
 					</CardContent>
 				</Tabs>
-				<CardFooter className="flex items-center justify-center gap-2 p-4">
+				<CardFooter className="flex items-center mt-auto justify-center gap-2 p-4">
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<Button
@@ -804,7 +837,11 @@ export function TabbedDataCard<T>({
 					<DialogHeader>
 						<DialogTitle>{effectiveModalTitle}</DialogTitle>
 					</DialogHeader>
-					<Tabs value={activeTab} onValueChange={handleTabChange} className="flex-1 flex flex-col overflow-hidden">
+					<Tabs
+						value={activeTab}
+						onValueChange={handleTabChange}
+						className="flex-1 gap-0 flex flex-col overflow-hidden"
+					>
 						<TabsList className="w-fit">
 							{tabs.map((tab) => (
 								<TabsTrigger key={tab.id} value={tab.id}>
@@ -822,7 +859,11 @@ export function TabbedDataCard<T>({
 									const modalCols = tab.modalColumns || tab.columns;
 									const displayData = modalDataByTab[tab.id] || tab.data;
 									return (
-										<TabsContent key={tab.id} value={tab.id} className="m-0 h-full">
+										<TabsContent
+											key={tab.id}
+											value={tab.id}
+											className="m-0 h-full"
+										>
 											<Table>
 												<TableHeader>
 													<TableRow>
@@ -849,18 +890,27 @@ export function TabbedDataCard<T>({
 															))}
 															{tab.actions && tab.actions.length > 0 && (
 																<td className="p-2 align-middle whitespace-nowrap w-10">
-																	<RowActionsMenu item={item} actions={tab.actions} />
+																	<RowActionsMenu
+																		item={item}
+																		actions={tab.actions}
+																	/>
 																</td>
 															)}
 														</TableRow>
 													))}
 													{displayData.length === 0 && (
 														<TableRow>
-															<td colSpan={modalCols.length + (tab.actions ? 1 : 0)} className="p-8">
+															<td
+																colSpan={
+																	modalCols.length + (tab.actions ? 1 : 0)
+																}
+																className="p-8"
+															>
 																<div className="flex flex-col items-center justify-center">
-																	<Inbox className="h-8 w-8 text-muted-foreground/50 mb-2" />
+																	<Inbox className="h-4 w-4 text-muted-foreground/50 mb-2" />
 																	<span className="text-sm text-muted-foreground">
-																		{tab.emptyMessage || "No data found for selected period."}
+																		{tab.emptyMessage ||
+																			"No data found for selected period."}
 																	</span>
 																</div>
 															</td>

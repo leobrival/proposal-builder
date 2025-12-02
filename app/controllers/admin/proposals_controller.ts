@@ -1,6 +1,11 @@
 import type { HttpContext } from "@adonisjs/core/http";
-import AdminAction, { type AdminActionType } from "#models/admin_action";
-import Proposal from "#models/proposal";
+import {
+	InvalidProposalStatusException,
+	ProposalNotFoundException,
+} from "#exceptions/index";
+import adminProposalService, {
+	type ProposalStatus,
+} from "#services/admin_proposal_service";
 
 export default class AdminProposalsController {
 	/**
@@ -8,34 +13,24 @@ export default class AdminProposalsController {
 	 */
 	async updateStatus({ auth, params, request, response }: HttpContext) {
 		const admin = auth.user!;
-		const proposal = await Proposal.findOrFail(params.id);
-		const status = request.input("status") as "published" | "draft" | "archived";
+		const status = request.input("status") as ProposalStatus;
 
-		if (!["published", "draft", "archived"].includes(status)) {
-			return response.badRequest({ error: "Invalid status value" });
+		try {
+			const result = await adminProposalService.updateStatus(
+				admin.id,
+				params.id,
+				status,
+			);
+			return response.json({ success: true, proposal: result });
+		} catch (error) {
+			if (error instanceof ProposalNotFoundException) {
+				return response.notFound({ error: error.message });
+			}
+			if (error instanceof InvalidProposalStatusException) {
+				return response.badRequest({ error: error.message });
+			}
+			throw error;
 		}
-
-		const oldStatus = proposal.status;
-		proposal.status = status;
-		await proposal.save();
-
-		// Determine action type
-		let actionType: AdminActionType = "proposal_status_change";
-		if (status === "published") actionType = "proposal_publish";
-		else if (status === "draft" && oldStatus === "published") actionType = "proposal_unpublish";
-		else if (status === "archived") actionType = "proposal_archive";
-		else if (oldStatus === "archived") actionType = "proposal_restore";
-
-		// Log action
-		await AdminAction.create({
-			adminId: admin.id,
-			actionType,
-			targetType: "proposal",
-			targetId: proposal.id,
-			metadata: { oldStatus, newStatus: status },
-		});
-
-		return response.json({ success: true, proposal: { id: proposal.id, status: proposal.status } });
 	}
 
 	/**
@@ -43,19 +38,15 @@ export default class AdminProposalsController {
 	 */
 	async destroy({ auth, params, response }: HttpContext) {
 		const admin = auth.user!;
-		const proposal = await Proposal.findOrFail(params.id);
 
-		// Log action before deletion
-		await AdminAction.create({
-			adminId: admin.id,
-			actionType: "proposal_delete",
-			targetType: "proposal",
-			targetId: proposal.id,
-			metadata: { deletedProposalTitle: proposal.title, deletedProposalSlug: proposal.slug },
-		});
-
-		await proposal.delete();
-
-		return response.json({ success: true });
+		try {
+			await adminProposalService.deleteProposal(admin.id, params.id);
+			return response.json({ success: true });
+		} catch (error) {
+			if (error instanceof ProposalNotFoundException) {
+				return response.notFound({ error: error.message });
+			}
+			throw error;
+		}
 	}
 }

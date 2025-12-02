@@ -69,8 +69,8 @@ export default class RoutesService {
 			const domainRoutes = routesMap[domain];
 
 			for (const route of domainRoutes) {
-				const type = this.getRouteType(route.pattern, route.methods);
-				const controller = this.getControllerName(route.handler);
+				const type = RoutesService.getRouteType(route.pattern, route.methods);
+				const controller = RoutesService.getControllerName(route.handler);
 
 				// Extract middleware names from the middleware object
 				let middlewareNames: string[] = [];
@@ -78,7 +78,7 @@ export default class RoutesService {
 					const mw = route.middleware as unknown;
 					if (Array.isArray(mw)) {
 						middlewareNames = mw.map((m) =>
-							typeof m === "string" ? m : String(m)
+							typeof m === "string" ? m : String(m),
 						);
 					} else if (typeof mw === "object" && mw !== null) {
 						// Middleware object may have an 'all' method or be iterable
@@ -115,14 +115,14 @@ export default class RoutesService {
 	 * Get routes filtered by type
 	 */
 	static getRoutesByType(type: RouteType): RouteInfo[] {
-		return this.getAllRoutes().filter((route) => route.type === type);
+		return RoutesService.getAllRoutes().filter((route) => route.type === type);
 	}
 
 	/**
 	 * Get route counts by type
 	 */
 	static getRouteCounts(): Record<RouteType, number> {
-		const routes = this.getAllRoutes();
+		const routes = RoutesService.getAllRoutes();
 		return {
 			page: routes.filter((r) => r.type === "page").length,
 			api: routes.filter((r) => r.type === "api").length,
